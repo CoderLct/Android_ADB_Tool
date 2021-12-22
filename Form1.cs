@@ -25,13 +25,13 @@ namespace Android_ADB_Tool
         {
             InitializeComponent();
             cmdUtils = new CMDUtils();
-            getIPList();
+            initList();
         }
 
         /**
          * 获取历史IP
          **/
-        private void getIPList()
+        private void initList()
         {
             if (File.Exists(PATH))
             {
@@ -42,6 +42,15 @@ namespace Android_ADB_Tool
                 }
                 sr.Close();
             }
+            comboBox3.Items.Add("无人值守机器人App");
+            comboBox3.Items.Add("端到云终端App");
+            comboBox3.Items.Add("车位显示屏App");
+            comboBox3.Items.Add("自助寻车机App");
+            comboBox3.SelectedIndex = 0;
+            comboBox4.Items.Add("端到云终端文件目录（/sdcard/.../files）");
+            comboBox4.Items.Add("自助寻车机文件目录（/storage/sdcard/MapData）");
+            comboBox4.SelectedIndex = 0;
+
         }
 
         private void setIPList(string ip)
@@ -358,7 +367,23 @@ namespace Android_ADB_Tool
                 button10.Enabled = false;
                 Boolean isSuccess = false;
                 string line = "";
-                sr = cmdUtils.RunCmd("adb -s " + getDevice() + " uninstall " + textBox7.Text);
+                string appid = "";
+                if (comboBox3.SelectedIndex == 0)
+                {
+                    appid = "com.ajb.smartparking.test";
+                }else if (comboBox3.SelectedIndex == 1)
+                {
+                    appid = "com.ajb.smartparking.test";
+                }
+                else if (comboBox3.SelectedIndex == 2)
+                {
+                    appid = "com.ajb.guidescreen";
+                }
+                else if (comboBox3.SelectedIndex == 3)
+                {
+                    appid = "com.example.anjubao_reverseforcar";
+                }
+                sr = cmdUtils.RunCmd("adb -s " + getDevice() + " uninstall " + appid);
                 while ((line = sr.ReadLine()) != null)
                 {
                     Console.WriteLine(line);
@@ -381,16 +406,33 @@ namespace Android_ADB_Tool
 
         }
 
+        /**
+         * 选择文件
+         **/
         private void button5_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "资源文件|*.mp4;*.png;*.jpg|配置文件|*.properties";
-            string filePath = textBox3.Text;
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            if (radioButton3.Checked)
             {
-                filePath = openFileDialog.FileName;
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "资源文件|*.mp4;*.png;*.jpg|配置文件|*.properties|所有文件|*.*";
+                string filePath = textBox3.Text;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = openFileDialog.FileName;
+                }
+                textBox3.Text = filePath;
+            
+            }else if (radioButton4.Checked)
+            {
+                FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+                folderBrowserDialog.Description = "请选择配置文件所在文件夹";
+                string filePath = textBox3.Text;
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = folderBrowserDialog.SelectedPath;
+                }
+                textBox3.Text = filePath;
             }
-            textBox3.Text = filePath;
 
         }
 
@@ -410,7 +452,26 @@ namespace Android_ADB_Tool
             button4.Enabled = false;
             Boolean isSuccess = false;
             string line = "";
-            sr = cmdUtils.RunCmd("adb -s " + getDevice() + " push " + textBox3.Text + " " + textBox5.Text);
+            string path1 = "";
+            string path2 = "";
+            if (comboBox4.SelectedIndex == 0)
+            {
+                path1 = "/sdcard/Android/data/com.ajb.smartparking.test/files";
+            }
+            else if (comboBox4.SelectedIndex == 1)
+            {
+                path1 = "/storage/sdcard/MapData";
+
+            }
+            if (radioButton3.Checked)
+            {
+                path2 = textBox3.Text;
+            }
+            else if (radioButton4.Checked)
+            {
+                path2 = textBox3.Text + "\\.";
+            }
+            sr = cmdUtils.RunCmd("adb -s " + getDevice() + " push " + path2 + " " + path1);
             while ((line = sr.ReadLine()) != null)
             {
                 Console.WriteLine(line);

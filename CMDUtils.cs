@@ -20,6 +20,7 @@ namespace Android_ADB_Tool
 
         public StreamReader RunCmd(string strCMD)
         {
+            Console.WriteLine("RunCmd " + strCMD);
             try
             {
                 p.StartInfo.FileName = "cmd.exe";
