@@ -910,5 +910,27 @@ namespace Android_ADB_Tool
                 return false;
             return Regex.IsMatch(ip, @"^((2[0-4]\d|25[0-5]|[01]?\d\d?)\.){3}(2[0-4]\d|25[0-5]|[01]?\d\d?)$");
         }
+
+        /**
+         * 通用选项框
+         */
+        private void label_menu_general_Click(object sender, EventArgs e)
+        {
+            label_menu_general1.Visible = true;
+            label_menu_config1.Visible = false;
+            panel_general.Visible = true;
+            panel_config.Visible = false;
+        }
+
+        /**
+         * 配置选线框 
+         */
+        private void label_menu_config_Click(object sender, EventArgs e)
+        {
+            label_menu_general1.Visible = false;
+            label_menu_config1.Visible = true;
+            panel_general.Visible = false;
+            panel_config.Visible = true;
+        }
     }
 }
