@@ -54,6 +54,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "处理进度";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.ProcessMsgBox_Load);
             this.ResumeLayout(false);
 

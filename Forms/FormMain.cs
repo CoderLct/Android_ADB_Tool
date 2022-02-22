@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Android_ADB_Tool.Entity;
+using Android_ADB_Tool.Utils;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web.Script.Serialization;
 using System.Windows.Forms;
 
 namespace Android_ADB_Tool
@@ -20,6 +24,8 @@ namespace Android_ADB_Tool
 
         private CMDUtils cmdUtils;
         private StreamReader sr = null;
+        private ParkingInfo currentParkingInfo = null;
+        private PortInfo currentPortInfo = null;
 
         public Form1()
         {
@@ -893,6 +899,7 @@ namespace Android_ADB_Tool
                         break;
                     }
                 }
+                sr.Close();
                 if (!isSuccess)
                 {
                     processMsgBox.Close();
@@ -912,25 +919,139 @@ namespace Android_ADB_Tool
         }
 
         /**
-         * 通用选项框
+         * 通用选项页面
          */
         private void label_menu_general_Click(object sender, EventArgs e)
         {
-            label_menu_general1.Visible = true;
             label_menu_config1.Visible = false;
-            panel_general.Visible = true;
             panel_config.Visible = false;
+            label_menu_general1.Visible = true;
+            panel_general.Visible = true;
         }
 
         /**
-         * 配置选线框 
+         * 配置选项页面
          */
         private void label_menu_config_Click(object sender, EventArgs e)
         {
             label_menu_general1.Visible = false;
-            label_menu_config1.Visible = true;
             panel_general.Visible = false;
+            label_menu_config1.Visible = true;
             panel_config.Visible = true;
+        }
+
+        /** 查询车场信息 */
+        private void button_query_parking_Click(object sender, EventArgs e)
+        {
+            if (tb_parking_id.Text.Length < 11)
+            {
+                MessageBox.Show("请输入完整11位车场编号", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                JavaScriptSerializer jss = new JavaScriptSerializer();
+                Hashtable ht = new Hashtable();
+                ht.Add("park", tb_parking_id.Text);
+                ProcessMsgBox processMsgBox = new ProcessMsgBox();
+                processMsgBox.Show("正在查找，请稍后...");
+                ResultInfo<ParkingInfo> resultInfo = HttpUtils.QueryParking(ht);
+                Console.WriteLine("查询结果：" + jss.Serialize(resultInfo));
+                processMsgBox.Close();
+                if (resultInfo.result == 0)
+                {
+                    currentParkingInfo = resultInfo.data;
+                    label_ltdCode.Text = currentParkingInfo.ltdCode;
+                    label_parkName.Text = currentParkingInfo.parkName;
+                    comboBox_portName.Enabled = true;
+                    foreach (PortInfo portInfo in currentParkingInfo.ports)
+                    {
+                        comboBox_portName.Items.Add(portInfo.portName);
+                    }
+                    
+                }
+                else
+                {
+                    MessageBox.Show("请求失败：" + resultInfo.message, "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        /** 选择通道 */
+        private void comboBox_portName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (currentParkingInfo != null)
+            {
+                currentPortInfo = currentParkingInfo.ports[comboBox_portName.SelectedIndex];
+                if (currentPortInfo != null)
+                {
+                    label_portId.Text = currentPortInfo.portId;
+                    label_portTypeName.Text = currentPortInfo.portTypeName;
+                    if (currentPortInfo.deviceCode == null || currentPortInfo.deviceCode.Length == 0)
+                    {
+                        label_deviceCode.Text = "未绑定设备";
+                        label_deviceCode.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        label_deviceCode.Text = currentPortInfo.deviceCode;
+                        label_deviceCode.ForeColor = Color.Black;
+                    }
+                    label_cameraIp.Text = currentPortInfo.cameraIp;
+                    label_cameraIp2.Text = currentPortInfo.cameraIp2;
+                    label_portIp.Text = currentPortInfo.portIp;
+                    label_portGatway.Text = currentPortInfo.portGateway;
+                    label_portDns.Text = currentPortInfo.portDns;
+                    label_robotIp.Text = currentPortInfo.robotIp;
+                    label_robotGateway.Text = currentPortInfo.robotGateway;
+                    label_robotDns.Text = currentPortInfo.robotDns;
+                    label_robotType.Text = currentPortInfo.robotType;
+                    label_portIp2.Text = currentPortInfo.portIp;
+                }
+                else
+                {
+                    Console.WriteLine("错误：currentPortInfo == null");
+                }
+            }
+            else
+            {
+                Console.WriteLine("错误：currentParkingInfo == null");
+            }
+        }
+
+        /** 连接设备*/
+        private void bt_device_connect_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        /** 绑定设备*/
+        private void bt_device_bind_Click(object sender, EventArgs e)
+        {
+            JavaScriptSerializer jss = new JavaScriptSerializer();
+            Hashtable ht = new Hashtable();
+            ht.Add("parkCode", tb_parking_id.Text);
+            ht.Add("portId", currentPortInfo.portId);
+            ht.Add("deviceCode", tb_deviceCode.Text);
+            ProcessMsgBox processMsgBox = new ProcessMsgBox();
+            processMsgBox.Show("正在绑定，请稍后...");
+            ResultInfo<string> resultInfo = HttpUtils.BindPort(ht);
+            Console.WriteLine("绑定结果：" + jss.Serialize(resultInfo));
+            processMsgBox.Close();
+            if (resultInfo.result == 0)
+            {
+                MessageBox.Show("绑定成功", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("请求失败：" + resultInfo.message, "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        /** 配置设备*/
+        private void bt_device_put_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

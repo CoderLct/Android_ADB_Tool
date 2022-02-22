@@ -97,22 +97,40 @@
             this.label_menu_general1 = new System.Windows.Forms.Label();
             this.label_menu_config1 = new System.Windows.Forms.Label();
             this.panel_config = new System.Windows.Forms.Panel();
-            this.button16 = new System.Windows.Forms.Button();
+            this.label_portId = new System.Windows.Forms.Label();
+            this.label_cameraIp = new System.Windows.Forms.Label();
+            this.label_parkName = new System.Windows.Forms.Label();
+            this.label_portTypeName = new System.Windows.Forms.Label();
+            this.label_cameraIp2 = new System.Windows.Forms.Label();
+            this.label_deviceCode = new System.Windows.Forms.Label();
+            this.label_ltdCode = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
+            this.label49 = new System.Windows.Forms.Label();
+            this.label46 = new System.Windows.Forms.Label();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label43 = new System.Windows.Forms.Label();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
+            this.button_query_parking = new System.Windows.Forms.Button();
             this.label24 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
-            this.comboBox7 = new System.Windows.Forms.ComboBox();
-            this.textBox17 = new System.Windows.Forms.TextBox();
+            this.comboBox_portName = new System.Windows.Forms.ComboBox();
+            this.tb_parking_id = new System.Windows.Forms.TextBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tabPage_device = new System.Windows.Forms.TabPage();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.label_portGatway = new System.Windows.Forms.Label();
+            this.label_portDns = new System.Windows.Forms.Label();
+            this.label_portIp = new System.Windows.Forms.Label();
+            this.label_deviceType = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.button14 = new System.Windows.Forms.Button();
+            this.bt_device_put = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.button15 = new System.Windows.Forms.Button();
+            this.tb_deviceCode = new System.Windows.Forms.TextBox();
+            this.bt_device_bind = new System.Windows.Forms.Button();
             this.label19 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
@@ -120,40 +138,29 @@
             this.comboBox5 = new System.Windows.Forms.ComboBox();
             this.comboBox6 = new System.Windows.Forms.ComboBox();
             this.radioButton5 = new System.Windows.Forms.RadioButton();
+            this.bt_device_connect = new System.Windows.Forms.Button();
             this.radioButton6 = new System.Windows.Forms.RadioButton();
-            this.button17 = new System.Windows.Forms.Button();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.label29 = new System.Windows.Forms.Label();
+            this.tabPage_robot = new System.Windows.Forms.TabPage();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.label_robotGateway = new System.Windows.Forms.Label();
+            this.label_robotDns = new System.Windows.Forms.Label();
+            this.label_robotIp = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
+            this.label39 = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.label_portIp2 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label_robotType = new System.Windows.Forms.Label();
+            this.label35 = new System.Windows.Forms.Label();
             this.button18 = new System.Windows.Forms.Button();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
-            this.label34 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
-            this.label35 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
-            this.label36 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.comboBox8 = new System.Windows.Forms.ComboBox();
             this.comboBox9 = new System.Windows.Forms.ComboBox();
             this.radioButton7 = new System.Windows.Forms.RadioButton();
             this.button19 = new System.Windows.Forms.Button();
             this.radioButton8 = new System.Windows.Forms.RadioButton();
-            this.label31 = new System.Windows.Forms.Label();
-            this.label33 = new System.Windows.Forms.Label();
-            this.label37 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
-            this.label38 = new System.Windows.Forms.Label();
-            this.label39 = new System.Windows.Forms.Label();
-            this.label40 = new System.Windows.Forms.Label();
-            this.label41 = new System.Windows.Forms.Label();
-            this.label42 = new System.Windows.Forms.Label();
-            this.label43 = new System.Windows.Forms.Label();
-            this.label44 = new System.Windows.Forms.Label();
-            this.label46 = new System.Windows.Forms.Label();
-            this.label49 = new System.Windows.Forms.Label();
-            this.label50 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -169,12 +176,12 @@
             this.panel_general.SuspendLayout();
             this.panel_config.SuspendLayout();
             this.tabControl2.SuspendLayout();
-            this.tabPage4.SuspendLayout();
+            this.tabPage_device.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.tabPage6.SuspendLayout();
+            this.tabPage_robot.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.groupBox11.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -867,6 +874,13 @@
             // panel_config
             // 
             this.panel_config.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_config.Controls.Add(this.label_portId);
+            this.panel_config.Controls.Add(this.label_cameraIp);
+            this.panel_config.Controls.Add(this.label_parkName);
+            this.panel_config.Controls.Add(this.label_portTypeName);
+            this.panel_config.Controls.Add(this.label_cameraIp2);
+            this.panel_config.Controls.Add(this.label_deviceCode);
+            this.panel_config.Controls.Add(this.label_ltdCode);
             this.panel_config.Controls.Add(this.label50);
             this.panel_config.Controls.Add(this.label49);
             this.panel_config.Controls.Add(this.label46);
@@ -874,11 +888,11 @@
             this.panel_config.Controls.Add(this.label43);
             this.panel_config.Controls.Add(this.label42);
             this.panel_config.Controls.Add(this.label41);
-            this.panel_config.Controls.Add(this.button16);
+            this.panel_config.Controls.Add(this.button_query_parking);
             this.panel_config.Controls.Add(this.label24);
             this.panel_config.Controls.Add(this.label23);
-            this.panel_config.Controls.Add(this.comboBox7);
-            this.panel_config.Controls.Add(this.textBox17);
+            this.panel_config.Controls.Add(this.comboBox_portName);
+            this.panel_config.Controls.Add(this.tb_parking_id);
             this.panel_config.Controls.Add(this.tabControl2);
             this.panel_config.Controls.Add(this.label29);
             this.panel_config.Location = new System.Drawing.Point(42, 0);
@@ -887,14 +901,142 @@
             this.panel_config.TabIndex = 10;
             this.panel_config.Visible = false;
             // 
-            // button16
+            // label_portId
             // 
-            this.button16.Location = new System.Drawing.Point(202, 16);
-            this.button16.Name = "button16";
-            this.button16.Size = new System.Drawing.Size(75, 23);
-            this.button16.TabIndex = 33;
-            this.button16.Text = "查询";
-            this.button16.UseVisualStyleBackColor = true;
+            this.label_portId.AutoSize = true;
+            this.label_portId.Location = new System.Drawing.Point(87, 85);
+            this.label_portId.Name = "label_portId";
+            this.label_portId.Size = new System.Drawing.Size(17, 12);
+            this.label_portId.TabIndex = 54;
+            this.label_portId.Text = "--";
+            // 
+            // label_cameraIp
+            // 
+            this.label_cameraIp.AutoSize = true;
+            this.label_cameraIp.Location = new System.Drawing.Point(91, 110);
+            this.label_cameraIp.Name = "label_cameraIp";
+            this.label_cameraIp.Size = new System.Drawing.Size(17, 12);
+            this.label_cameraIp.TabIndex = 53;
+            this.label_cameraIp.Text = "--";
+            // 
+            // label_parkName
+            // 
+            this.label_parkName.AutoSize = true;
+            this.label_parkName.Location = new System.Drawing.Point(260, 60);
+            this.label_parkName.Name = "label_parkName";
+            this.label_parkName.Size = new System.Drawing.Size(17, 12);
+            this.label_parkName.TabIndex = 52;
+            this.label_parkName.Text = "--";
+            // 
+            // label_portTypeName
+            // 
+            this.label_portTypeName.AutoSize = true;
+            this.label_portTypeName.Location = new System.Drawing.Point(260, 85);
+            this.label_portTypeName.Name = "label_portTypeName";
+            this.label_portTypeName.Size = new System.Drawing.Size(17, 12);
+            this.label_portTypeName.TabIndex = 51;
+            this.label_portTypeName.Text = "--";
+            // 
+            // label_cameraIp2
+            // 
+            this.label_cameraIp2.AutoSize = true;
+            this.label_cameraIp2.Location = new System.Drawing.Point(261, 110);
+            this.label_cameraIp2.Name = "label_cameraIp2";
+            this.label_cameraIp2.Size = new System.Drawing.Size(17, 12);
+            this.label_cameraIp2.TabIndex = 50;
+            this.label_cameraIp2.Text = "--";
+            // 
+            // label_deviceCode
+            // 
+            this.label_deviceCode.AutoSize = true;
+            this.label_deviceCode.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label_deviceCode.Location = new System.Drawing.Point(419, 85);
+            this.label_deviceCode.Name = "label_deviceCode";
+            this.label_deviceCode.Size = new System.Drawing.Size(17, 12);
+            this.label_deviceCode.TabIndex = 49;
+            this.label_deviceCode.Text = "--";
+            // 
+            // label_ltdCode
+            // 
+            this.label_ltdCode.AutoSize = true;
+            this.label_ltdCode.Location = new System.Drawing.Point(87, 60);
+            this.label_ltdCode.Name = "label_ltdCode";
+            this.label_ltdCode.Size = new System.Drawing.Size(17, 12);
+            this.label_ltdCode.TabIndex = 48;
+            this.label_ltdCode.Text = "--";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(200, 110);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(65, 12);
+            this.label50.TabIndex = 47;
+            this.label50.Text = "摄像枪IP2:";
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(347, 85);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(71, 12);
+            this.label49.TabIndex = 46;
+            this.label49.Text = "控制机编号:";
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(200, 60);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(59, 12);
+            this.label46.TabIndex = 43;
+            this.label46.Text = "车场名称:";
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(30, 85);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(59, 12);
+            this.label44.TabIndex = 41;
+            this.label44.Text = "通道编号:";
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(200, 85);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(59, 12);
+            this.label43.TabIndex = 40;
+            this.label43.Text = "通道类型:";
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(30, 110);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(65, 12);
+            this.label42.TabIndex = 39;
+            this.label42.Text = "摄像枪IP1:";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(30, 60);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(59, 12);
+            this.label41.TabIndex = 38;
+            this.label41.Text = "企业编号:";
+            // 
+            // button_query_parking
+            // 
+            this.button_query_parking.Location = new System.Drawing.Point(202, 16);
+            this.button_query_parking.Name = "button_query_parking";
+            this.button_query_parking.Size = new System.Drawing.Size(75, 23);
+            this.button_query_parking.TabIndex = 33;
+            this.button_query_parking.Text = "查询";
+            this.button_query_parking.UseVisualStyleBackColor = true;
+            this.button_query_parking.Click += new System.EventHandler(this.button_query_parking_Click);
             // 
             // label24
             // 
@@ -914,28 +1056,29 @@
             this.label23.TabIndex = 29;
             this.label23.Text = "车场编号:";
             // 
-            // comboBox7
+            // comboBox_portName
             // 
-            this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox7.Enabled = false;
-            this.comboBox7.FormattingEnabled = true;
-            this.comboBox7.Location = new System.Drawing.Point(388, 15);
-            this.comboBox7.Name = "comboBox7";
-            this.comboBox7.Size = new System.Drawing.Size(121, 20);
-            this.comboBox7.TabIndex = 28;
+            this.comboBox_portName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_portName.Enabled = false;
+            this.comboBox_portName.FormattingEnabled = true;
+            this.comboBox_portName.Location = new System.Drawing.Point(388, 15);
+            this.comboBox_portName.Name = "comboBox_portName";
+            this.comboBox_portName.Size = new System.Drawing.Size(121, 20);
+            this.comboBox_portName.TabIndex = 28;
+            this.comboBox_portName.SelectedIndexChanged += new System.EventHandler(this.comboBox_portName_SelectedIndexChanged);
             // 
-            // textBox17
+            // tb_parking_id
             // 
-            this.textBox17.Location = new System.Drawing.Point(89, 18);
-            this.textBox17.Name = "textBox17";
-            this.textBox17.Size = new System.Drawing.Size(112, 21);
-            this.textBox17.TabIndex = 27;
-            this.textBox17.Tag = "请输入完整8位编号";
+            this.tb_parking_id.Location = new System.Drawing.Point(89, 18);
+            this.tb_parking_id.Name = "tb_parking_id";
+            this.tb_parking_id.Size = new System.Drawing.Size(112, 21);
+            this.tb_parking_id.TabIndex = 27;
+            this.tb_parking_id.Tag = "请输入完整8位编号";
             // 
             // tabControl2
             // 
-            this.tabControl2.Controls.Add(this.tabPage4);
-            this.tabControl2.Controls.Add(this.tabPage6);
+            this.tabControl2.Controls.Add(this.tabPage_device);
+            this.tabControl2.Controls.Add(this.tabPage_robot);
             this.tabControl2.Location = new System.Drawing.Point(10, 152);
             this.tabControl2.Multiline = true;
             this.tabControl2.Name = "tabControl2";
@@ -943,36 +1086,69 @@
             this.tabControl2.Size = new System.Drawing.Size(601, 343);
             this.tabControl2.TabIndex = 3;
             // 
-            // tabPage4
+            // tabPage_device
             // 
-            this.tabPage4.Controls.Add(this.groupBox8);
-            this.tabPage4.Controls.Add(this.groupBox7);
-            this.tabPage4.Controls.Add(this.groupBox6);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(593, 317);
-            this.tabPage4.TabIndex = 0;
-            this.tabPage4.Text = "控制机参数";
-            this.tabPage4.UseVisualStyleBackColor = true;
+            this.tabPage_device.Controls.Add(this.groupBox8);
+            this.tabPage_device.Controls.Add(this.groupBox7);
+            this.tabPage_device.Controls.Add(this.groupBox6);
+            this.tabPage_device.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_device.Name = "tabPage_device";
+            this.tabPage_device.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_device.Size = new System.Drawing.Size(593, 317);
+            this.tabPage_device.TabIndex = 0;
+            this.tabPage_device.Text = "控制机参数";
+            this.tabPage_device.UseVisualStyleBackColor = true;
             // 
             // groupBox8
             // 
-            this.groupBox8.Controls.Add(this.label37);
-            this.groupBox8.Controls.Add(this.label33);
-            this.groupBox8.Controls.Add(this.label31);
-            this.groupBox8.Controls.Add(this.label34);
+            this.groupBox8.Controls.Add(this.label_portGatway);
+            this.groupBox8.Controls.Add(this.label_portDns);
+            this.groupBox8.Controls.Add(this.label_portIp);
+            this.groupBox8.Controls.Add(this.label_deviceType);
             this.groupBox8.Controls.Add(this.label22);
             this.groupBox8.Controls.Add(this.label25);
             this.groupBox8.Controls.Add(this.label21);
             this.groupBox8.Controls.Add(this.label20);
-            this.groupBox8.Controls.Add(this.button14);
+            this.groupBox8.Controls.Add(this.bt_device_put);
             this.groupBox8.Location = new System.Drawing.Point(0, 212);
             this.groupBox8.Name = "groupBox8";
             this.groupBox8.Size = new System.Drawing.Size(590, 105);
             this.groupBox8.TabIndex = 11;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "步骤三：参数写入控制机";
+            // 
+            // label_portGatway
+            // 
+            this.label_portGatway.Location = new System.Drawing.Point(222, 37);
+            this.label_portGatway.Name = "label_portGatway";
+            this.label_portGatway.Size = new System.Drawing.Size(110, 14);
+            this.label_portGatway.TabIndex = 41;
+            this.label_portGatway.Text = "--";
+            // 
+            // label_portDns
+            // 
+            this.label_portDns.Location = new System.Drawing.Point(376, 37);
+            this.label_portDns.Name = "label_portDns";
+            this.label_portDns.Size = new System.Drawing.Size(110, 14);
+            this.label_portDns.TabIndex = 40;
+            this.label_portDns.Text = "--";
+            // 
+            // label_portIp
+            // 
+            this.label_portIp.Location = new System.Drawing.Point(68, 37);
+            this.label_portIp.Name = "label_portIp";
+            this.label_portIp.Size = new System.Drawing.Size(106, 14);
+            this.label_portIp.TabIndex = 39;
+            this.label_portIp.Text = "--";
+            // 
+            // label_deviceType
+            // 
+            this.label_deviceType.AutoSize = true;
+            this.label_deviceType.Location = new System.Drawing.Point(120, 67);
+            this.label_deviceType.Name = "label_deviceType";
+            this.label_deviceType.Size = new System.Drawing.Size(17, 12);
+            this.label_deviceType.TabIndex = 38;
+            this.label_deviceType.Text = "--";
             // 
             // label22
             // 
@@ -1010,19 +1186,21 @@
             this.label20.TabIndex = 31;
             this.label20.Text = "DNS:";
             // 
-            // button14
+            // bt_device_put
             // 
-            this.button14.Location = new System.Drawing.Point(447, 67);
-            this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(75, 25);
-            this.button14.TabIndex = 33;
-            this.button14.Text = "写入配置";
-            this.button14.UseVisualStyleBackColor = true;
+            this.bt_device_put.Enabled = false;
+            this.bt_device_put.Location = new System.Drawing.Point(447, 67);
+            this.bt_device_put.Name = "bt_device_put";
+            this.bt_device_put.Size = new System.Drawing.Size(75, 25);
+            this.bt_device_put.TabIndex = 33;
+            this.bt_device_put.Text = "写入配置";
+            this.bt_device_put.UseVisualStyleBackColor = true;
+            this.bt_device_put.Click += new System.EventHandler(this.bt_device_put_Click);
             // 
             // groupBox7
             // 
-            this.groupBox7.Controls.Add(this.textBox5);
-            this.groupBox7.Controls.Add(this.button15);
+            this.groupBox7.Controls.Add(this.tb_deviceCode);
+            this.groupBox7.Controls.Add(this.bt_device_bind);
             this.groupBox7.Controls.Add(this.label19);
             this.groupBox7.Controls.Add(this.label18);
             this.groupBox7.Location = new System.Drawing.Point(0, 114);
@@ -1032,24 +1210,27 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "步骤二：控制机绑定通道";
             // 
-            // textBox5
+            // tb_deviceCode
             // 
-            this.textBox5.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.textBox5.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox5.Location = new System.Drawing.Point(118, 34);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.ReadOnly = true;
-            this.textBox5.Size = new System.Drawing.Size(211, 26);
-            this.textBox5.TabIndex = 36;
+            this.tb_deviceCode.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.tb_deviceCode.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_deviceCode.Location = new System.Drawing.Point(118, 34);
+            this.tb_deviceCode.Name = "tb_deviceCode";
+            this.tb_deviceCode.ReadOnly = true;
+            this.tb_deviceCode.Size = new System.Drawing.Size(211, 26);
+            this.tb_deviceCode.TabIndex = 36;
+            this.tb_deviceCode.Text = "--";
             // 
-            // button15
+            // bt_device_bind
             // 
-            this.button15.Location = new System.Drawing.Point(446, 36);
-            this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(75, 25);
-            this.button15.TabIndex = 32;
-            this.button15.Text = "绑定设备";
-            this.button15.UseVisualStyleBackColor = true;
+            this.bt_device_bind.Enabled = false;
+            this.bt_device_bind.Location = new System.Drawing.Point(446, 36);
+            this.bt_device_bind.Name = "bt_device_bind";
+            this.bt_device_bind.Size = new System.Drawing.Size(75, 25);
+            this.bt_device_bind.TabIndex = 32;
+            this.bt_device_bind.Text = "绑定设备";
+            this.bt_device_bind.UseVisualStyleBackColor = true;
+            this.bt_device_bind.Click += new System.EventHandler(this.bt_device_bind_Click);
             // 
             // label19
             // 
@@ -1085,7 +1266,7 @@
             this.panel2.Controls.Add(this.comboBox5);
             this.panel2.Controls.Add(this.comboBox6);
             this.panel2.Controls.Add(this.radioButton5);
-            this.panel2.Controls.Add(this.button17);
+            this.panel2.Controls.Add(this.bt_device_connect);
             this.panel2.Controls.Add(this.radioButton6);
             this.panel2.Location = new System.Drawing.Point(26, 21);
             this.panel2.Name = "panel2";
@@ -1124,6 +1305,18 @@
             this.radioButton5.Text = "USB";
             this.radioButton5.UseVisualStyleBackColor = true;
             // 
+            // bt_device_connect
+            // 
+            this.bt_device_connect.BackColor = System.Drawing.Color.Green;
+            this.bt_device_connect.ForeColor = System.Drawing.Color.White;
+            this.bt_device_connect.Location = new System.Drawing.Point(421, 11);
+            this.bt_device_connect.Name = "bt_device_connect";
+            this.bt_device_connect.Size = new System.Drawing.Size(75, 25);
+            this.bt_device_connect.TabIndex = 2;
+            this.bt_device_connect.Text = "连接";
+            this.bt_device_connect.UseVisualStyleBackColor = false;
+            this.bt_device_connect.Click += new System.EventHandler(this.bt_device_connect_Click);
+            // 
             // radioButton6
             // 
             this.radioButton6.AutoSize = true;
@@ -1137,50 +1330,29 @@
             this.radioButton6.Text = "IP";
             this.radioButton6.UseVisualStyleBackColor = true;
             // 
-            // button17
+            // tabPage_robot
             // 
-            this.button17.BackColor = System.Drawing.Color.Green;
-            this.button17.ForeColor = System.Drawing.Color.White;
-            this.button17.Location = new System.Drawing.Point(421, 11);
-            this.button17.Name = "button17";
-            this.button17.Size = new System.Drawing.Size(75, 25);
-            this.button17.TabIndex = 2;
-            this.button17.Text = "连接";
-            this.button17.UseVisualStyleBackColor = false;
-            // 
-            // tabPage6
-            // 
-            this.tabPage6.Controls.Add(this.groupBox9);
-            this.tabPage6.Controls.Add(this.groupBox11);
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(593, 317);
-            this.tabPage6.TabIndex = 2;
-            this.tabPage6.Text = "机器人参数";
-            this.tabPage6.UseVisualStyleBackColor = true;
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.ForeColor = System.Drawing.Color.Maroon;
-            this.label29.Location = new System.Drawing.Point(8, 507);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(269, 12);
-            this.label29.TabIndex = 23;
-            this.label29.Text = "注：只适用于安装了端到云APK( V1.3.6+ )的终端";
+            this.tabPage_robot.Controls.Add(this.groupBox9);
+            this.tabPage_robot.Controls.Add(this.groupBox11);
+            this.tabPage_robot.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_robot.Name = "tabPage_robot";
+            this.tabPage_robot.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_robot.Size = new System.Drawing.Size(593, 317);
+            this.tabPage_robot.TabIndex = 2;
+            this.tabPage_robot.Text = "机器人参数";
+            this.tabPage_robot.UseVisualStyleBackColor = true;
             // 
             // groupBox9
             // 
-            this.groupBox9.Controls.Add(this.label26);
-            this.groupBox9.Controls.Add(this.label28);
-            this.groupBox9.Controls.Add(this.label30);
+            this.groupBox9.Controls.Add(this.label_robotGateway);
+            this.groupBox9.Controls.Add(this.label_robotDns);
+            this.groupBox9.Controls.Add(this.label_robotIp);
             this.groupBox9.Controls.Add(this.label38);
             this.groupBox9.Controls.Add(this.label39);
             this.groupBox9.Controls.Add(this.label40);
-            this.groupBox9.Controls.Add(this.label32);
+            this.groupBox9.Controls.Add(this.label_portIp2);
             this.groupBox9.Controls.Add(this.label36);
-            this.groupBox9.Controls.Add(this.label27);
+            this.groupBox9.Controls.Add(this.label_robotType);
             this.groupBox9.Controls.Add(this.label35);
             this.groupBox9.Controls.Add(this.button18);
             this.groupBox9.Location = new System.Drawing.Point(0, 150);
@@ -1190,8 +1362,96 @@
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "步骤二：写入参数到机器人";
             // 
+            // label_robotGateway
+            // 
+            this.label_robotGateway.Location = new System.Drawing.Point(222, 37);
+            this.label_robotGateway.Name = "label_robotGateway";
+            this.label_robotGateway.Size = new System.Drawing.Size(110, 14);
+            this.label_robotGateway.TabIndex = 56;
+            this.label_robotGateway.Text = "--";
+            // 
+            // label_robotDns
+            // 
+            this.label_robotDns.Location = new System.Drawing.Point(376, 37);
+            this.label_robotDns.Name = "label_robotDns";
+            this.label_robotDns.Size = new System.Drawing.Size(110, 14);
+            this.label_robotDns.TabIndex = 55;
+            this.label_robotDns.Text = "--";
+            // 
+            // label_robotIp
+            // 
+            this.label_robotIp.Location = new System.Drawing.Point(68, 37);
+            this.label_robotIp.Name = "label_robotIp";
+            this.label_robotIp.Size = new System.Drawing.Size(110, 14);
+            this.label_robotIp.TabIndex = 54;
+            this.label_robotIp.Text = "--";
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(47, 37);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(23, 12);
+            this.label38.TabIndex = 51;
+            this.label38.Text = "IP:";
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(190, 37);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(35, 12);
+            this.label39.TabIndex = 52;
+            this.label39.Text = "网关:";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(350, 37);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(29, 12);
+            this.label40.TabIndex = 53;
+            this.label40.Text = "DNS:";
+            // 
+            // label_portIp2
+            // 
+            this.label_portIp2.AutoSize = true;
+            this.label_portIp2.Location = new System.Drawing.Point(286, 68);
+            this.label_portIp2.Name = "label_portIp2";
+            this.label_portIp2.Size = new System.Drawing.Size(17, 12);
+            this.label_portIp2.TabIndex = 50;
+            this.label_portIp2.Text = "--";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(228, 68);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(59, 12);
+            this.label36.TabIndex = 49;
+            this.label36.Text = "控制机IP:";
+            // 
+            // label_robotType
+            // 
+            this.label_robotType.AutoSize = true;
+            this.label_robotType.Location = new System.Drawing.Point(116, 68);
+            this.label_robotType.Name = "label_robotType";
+            this.label_robotType.Size = new System.Drawing.Size(17, 12);
+            this.label_robotType.TabIndex = 48;
+            this.label_robotType.Text = "--";
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(47, 68);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(71, 12);
+            this.label35.TabIndex = 47;
+            this.label35.Text = "机器人类型:";
+            // 
             // button18
             // 
+            this.button18.Enabled = false;
             this.button18.Location = new System.Drawing.Point(445, 68);
             this.button18.Name = "button18";
             this.button18.Size = new System.Drawing.Size(75, 25);
@@ -1208,51 +1468,6 @@
             this.groupBox11.TabIndex = 37;
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "步骤一：连接机器人";
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(120, 67);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(89, 12);
-            this.label34.TabIndex = 38;
-            this.label34.Text = "AJB-NPC-A3Plus";
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(116, 68);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(89, 12);
-            this.label27.TabIndex = 48;
-            this.label27.Text = "AJB-NPC-A3Plus";
-            // 
-            // label35
-            // 
-            this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(47, 68);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(71, 12);
-            this.label35.TabIndex = 47;
-            this.label35.Text = "机器人类型:";
-            // 
-            // label32
-            // 
-            this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(286, 68);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(89, 12);
-            this.label32.TabIndex = 50;
-            this.label32.Text = "192.168.41.238";
-            // 
-            // label36
-            // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(228, 68);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(59, 12);
-            this.label36.TabIndex = 49;
-            this.label36.Text = "控制机IP:";
             // 
             // panel4
             // 
@@ -1322,143 +1537,15 @@
             this.radioButton8.Text = "IP";
             this.radioButton8.UseVisualStyleBackColor = true;
             // 
-            // label31
+            // label29
             // 
-            this.label31.Location = new System.Drawing.Point(68, 37);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(106, 14);
-            this.label31.TabIndex = 39;
-            this.label31.Text = "192.168.41.246";
-            // 
-            // label33
-            // 
-            this.label33.Location = new System.Drawing.Point(376, 37);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(110, 14);
-            this.label33.TabIndex = 40;
-            this.label33.Text = "192.168.41.246";
-            // 
-            // label37
-            // 
-            this.label37.Location = new System.Drawing.Point(222, 37);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(110, 14);
-            this.label37.TabIndex = 41;
-            this.label37.Text = "192.168.41.246";
-            // 
-            // label26
-            // 
-            this.label26.Location = new System.Drawing.Point(222, 37);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(110, 14);
-            this.label26.TabIndex = 56;
-            this.label26.Text = "192.168.41.246";
-            // 
-            // label28
-            // 
-            this.label28.Location = new System.Drawing.Point(376, 37);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(110, 14);
-            this.label28.TabIndex = 55;
-            this.label28.Text = "192.168.41.246";
-            // 
-            // label30
-            // 
-            this.label30.Location = new System.Drawing.Point(68, 37);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(110, 14);
-            this.label30.TabIndex = 54;
-            this.label30.Text = "192.168.41.246";
-            // 
-            // label38
-            // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(47, 37);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(23, 12);
-            this.label38.TabIndex = 51;
-            this.label38.Text = "IP:";
-            // 
-            // label39
-            // 
-            this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(190, 37);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(35, 12);
-            this.label39.TabIndex = 52;
-            this.label39.Text = "网关:";
-            // 
-            // label40
-            // 
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(350, 37);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(29, 12);
-            this.label40.TabIndex = 53;
-            this.label40.Text = "DNS:";
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(30, 60);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(59, 12);
-            this.label41.TabIndex = 38;
-            this.label41.Text = "企业编号:";
-            // 
-            // label42
-            // 
-            this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(30, 110);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(65, 12);
-            this.label42.TabIndex = 39;
-            this.label42.Text = "摄像枪IP1:";
-            // 
-            // label43
-            // 
-            this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(186, 85);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(59, 12);
-            this.label43.TabIndex = 40;
-            this.label43.Text = "通道类型:";
-            // 
-            // label44
-            // 
-            this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(30, 85);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(59, 12);
-            this.label44.TabIndex = 41;
-            this.label44.Text = "通道编号:";
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(186, 60);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(59, 12);
-            this.label46.TabIndex = 43;
-            this.label46.Text = "车场名称:";
-            // 
-            // label49
-            // 
-            this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(331, 80);
-            this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(71, 12);
-            this.label49.TabIndex = 46;
-            this.label49.Text = "控制机编号:";
-            // 
-            // label50
-            // 
-            this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(186, 110);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(65, 12);
-            this.label50.TabIndex = 47;
-            this.label50.Text = "摄像枪IP2:";
+            this.label29.AutoSize = true;
+            this.label29.ForeColor = System.Drawing.Color.Maroon;
+            this.label29.Location = new System.Drawing.Point(8, 507);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(269, 12);
+            this.label29.TabIndex = 23;
+            this.label29.Text = "注：只适用于安装了端到云APK( V1.3.6+ )的终端";
             // 
             // Form1
             // 
@@ -1500,7 +1587,7 @@
             this.panel_config.ResumeLayout(false);
             this.panel_config.PerformLayout();
             this.tabControl2.ResumeLayout(false);
-            this.tabPage4.ResumeLayout(false);
+            this.tabPage_device.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
             this.groupBox7.ResumeLayout(false);
@@ -1508,7 +1595,7 @@
             this.groupBox6.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            this.tabPage6.ResumeLayout(false);
+            this.tabPage_robot.ResumeLayout(false);
             this.groupBox9.ResumeLayout(false);
             this.groupBox9.PerformLayout();
             this.groupBox11.ResumeLayout(false);
@@ -1587,25 +1674,25 @@
         private System.Windows.Forms.Label label_menu_config1;
         private System.Windows.Forms.Panel panel_config;
         private System.Windows.Forms.TabControl tabControl2;
-        private System.Windows.Forms.TabPage tabPage4;
-        internal System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.TabPage tabPage_device;
+        internal System.Windows.Forms.TabPage tabPage_robot;
         private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.Button button16;
+        private System.Windows.Forms.Button button_query_parking;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.ComboBox comboBox7;
-        private System.Windows.Forms.TextBox textBox17;
+        private System.Windows.Forms.ComboBox comboBox_portName;
+        private System.Windows.Forms.TextBox tb_parking_id;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.ComboBox comboBox5;
         private System.Windows.Forms.ComboBox comboBox6;
         private System.Windows.Forms.RadioButton radioButton5;
         private System.Windows.Forms.RadioButton radioButton6;
-        private System.Windows.Forms.Button button17;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Button bt_device_connect;
+        private System.Windows.Forms.TextBox tb_deviceCode;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.Button button14;
-        private System.Windows.Forms.Button button15;
+        private System.Windows.Forms.Button bt_device_put;
+        private System.Windows.Forms.Button bt_device_bind;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label22;
@@ -1616,10 +1703,10 @@
         private System.Windows.Forms.GroupBox groupBox9;
         private System.Windows.Forms.Button button18;
         private System.Windows.Forms.GroupBox groupBox11;
-        private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Label label_deviceType;
+        private System.Windows.Forms.Label label_portIp2;
         private System.Windows.Forms.Label label36;
-        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label_robotType;
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.ComboBox comboBox8;
@@ -1627,12 +1714,12 @@
         private System.Windows.Forms.RadioButton radioButton7;
         private System.Windows.Forms.Button button19;
         private System.Windows.Forms.RadioButton radioButton8;
-        private System.Windows.Forms.Label label37;
-        private System.Windows.Forms.Label label33;
-        private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label_portGatway;
+        private System.Windows.Forms.Label label_portDns;
+        private System.Windows.Forms.Label label_portIp;
+        private System.Windows.Forms.Label label_robotGateway;
+        private System.Windows.Forms.Label label_robotDns;
+        private System.Windows.Forms.Label label_robotIp;
         private System.Windows.Forms.Label label38;
         private System.Windows.Forms.Label label39;
         private System.Windows.Forms.Label label40;
@@ -1643,6 +1730,13 @@
         private System.Windows.Forms.Label label43;
         private System.Windows.Forms.Label label42;
         private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label label_portId;
+        private System.Windows.Forms.Label label_cameraIp;
+        private System.Windows.Forms.Label label_parkName;
+        private System.Windows.Forms.Label label_portTypeName;
+        private System.Windows.Forms.Label label_cameraIp2;
+        private System.Windows.Forms.Label label_deviceCode;
+        private System.Windows.Forms.Label label_ltdCode;
     }
 }
 
