@@ -34,9 +34,9 @@
             // msg
             // 
             this.msg.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.msg.Location = new System.Drawing.Point(0, 45);
+            this.msg.Location = new System.Drawing.Point(12, 45);
             this.msg.Name = "msg";
-            this.msg.Size = new System.Drawing.Size(315, 23);
+            this.msg.Size = new System.Drawing.Size(291, 23);
             this.msg.TabIndex = 0;
             this.msg.Text = "正在加载，请稍后...";
             this.msg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

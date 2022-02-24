@@ -2,14 +2,8 @@
 using Android_ADB_Tool.Utils;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
@@ -19,7 +13,6 @@ namespace Android_ADB_Tool
     public partial class Form1 : Form
     {
         private const int MAX_CLOSE_TIME = 300;  //Xs若无操作则关闭adb连接
-        private const string PATH = @"iplist.ini";
         private int adbCloseTimer = 0;
 
         private CMDUtils cmdUtils;
@@ -38,10 +31,11 @@ namespace Android_ADB_Tool
          * 获取历史IP
          **/
         private void initList()
+
         {
-            if (File.Exists(PATH))
+            if (File.Exists(Util.PATH))
             {
-                StreamReader sr = new StreamReader(PATH, true);
+                StreamReader sr = new StreamReader(Util.PATH, true);
                 while (sr.Peek() > 0)
                 {
                     comboBox2.Items.Add(sr.ReadLine());
@@ -65,11 +59,11 @@ namespace Android_ADB_Tool
             {
                 //ip不存在
                 comboBox2.Items.Add(ip);
-                if (!File.Exists(PATH))
+                if (!File.Exists(Util.PATH))
                 {
-                    File.Create(PATH).Close();
+                    File.Create(Util.PATH).Close();
                 }
-                StreamWriter sw = new StreamWriter(PATH, true);
+                StreamWriter sw = new StreamWriter(Util.PATH, true);
                 sw.WriteLine(ip);
                 sw.Close();
             }
@@ -154,52 +148,7 @@ namespace Android_ADB_Tool
         private void button1_Click(object sender, EventArgs e)
         {
             adbCloseTimer = 0;
-            string line = "";
-            if (button1.Text.Equals("连接"))
-            {
-                Console.WriteLine("连接");
-                ProcessMsgBox processMsgBox = new ProcessMsgBox();
-                processMsgBox.Show("正在连接，请稍后...");
-                button1.Enabled = false;
-                Boolean isSuccess = false;
-                sr = cmdUtils.RunCmd("adb connect " + comboBox2.Text + ":5555");
-                while ((line = sr.ReadLine()) != null)
-                {
-                    if (line.Contains("connected"))
-                    {
-                        button1.Text = "断开";
-                        button1.BackColor = Color.Red;
-                        comboBox2.Enabled = false;
-                        timer2.Interval = 1000;
-                        timer2.Enabled = true;
-                        isSuccess = true;
-                        setIPList(comboBox2.Text);
-                    }
-                }
-                processMsgBox.Close();
-                button1.Enabled = true;
-                if (!isSuccess)
-                {
-                    MessageBox.Show("连接失败", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else if (button1.Text.Equals("断开"))
-            {
-                Console.WriteLine("断开");
-                sr = cmdUtils.RunCmd("adb disconnect");
-                while ((line = sr.ReadLine()) != null)
-                {
-                    if (line.Contains("disconnected"))
-                    {
-                        button1.Text = "连接";
-                        button1.BackColor = Color.Green;
-                        comboBox2.Enabled = true;
-                        comboBox2.Enabled = true;
-                        timer2.Enabled = false;
-                    }
-                }
-
-            }
+            Util.connectADB(cmdUtils, button1, comboBox2, null, timer2);
         }
 
         /**
@@ -951,9 +900,9 @@ namespace Android_ADB_Tool
             {
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 Hashtable ht = new Hashtable();
-                ht.Add("park", tb_parking_id.Text);
+                ht.Add("parkCode", tb_parking_id.Text);
                 ProcessMsgBox processMsgBox = new ProcessMsgBox();
-                processMsgBox.Show("正在查找，请稍后...");
+                //processMsgBox.Show("正在查找，请稍后...");
                 ResultInfo<ParkingInfo> resultInfo = HttpUtils.QueryParking(ht);
                 Console.WriteLine("查询结果：" + jss.Serialize(resultInfo));
                 processMsgBox.Close();
@@ -963,9 +912,14 @@ namespace Android_ADB_Tool
                     label_ltdCode.Text = currentParkingInfo.ltdCode;
                     label_parkName.Text = currentParkingInfo.parkName;
                     comboBox_portName.Enabled = true;
+                    comboBox_portName.Items.Clear();
                     foreach (PortInfo portInfo in currentParkingInfo.ports)
                     {
                         comboBox_portName.Items.Add(portInfo.portName);
+                    }
+                    if (comboBox_portName.Items.Count != 0)
+                    {
+                        comboBox_portName.SelectedIndex = 0;
                     }
                     
                 }
@@ -984,28 +938,43 @@ namespace Android_ADB_Tool
                 currentPortInfo = currentParkingInfo.ports[comboBox_portName.SelectedIndex];
                 if (currentPortInfo != null)
                 {
+                    tabControl2.SelectedIndex = 0;
                     label_portId.Text = currentPortInfo.portId;
                     label_portTypeName.Text = currentPortInfo.portTypeName;
                     if (currentPortInfo.deviceCode == null || currentPortInfo.deviceCode.Length == 0)
                     {
                         label_deviceCode.Text = "未绑定设备";
                         label_deviceCode.ForeColor = Color.Red;
+                        tb_deviceIp.Text = "192.168.9.101";
+                        bt_device_bind.Visible = true;
                     }
                     else
                     {
                         label_deviceCode.Text = currentPortInfo.deviceCode;
                         label_deviceCode.ForeColor = Color.Black;
+                        tb_deviceIp.Text = currentPortInfo.portIp;
+                        bt_device_bind.Visible = false;
                     }
                     label_cameraIp.Text = currentPortInfo.cameraIp;
-                    label_cameraIp2.Text = currentPortInfo.cameraIp2;
+                    label_cameraIp2.Text = Util.valid(currentPortInfo.cameraIp2)? currentPortInfo.cameraIp2 : "--";
                     label_portIp.Text = currentPortInfo.portIp;
                     label_portGatway.Text = currentPortInfo.portGateway;
                     label_portDns.Text = currentPortInfo.portDns;
-                    label_robotIp.Text = currentPortInfo.robotIp;
-                    label_robotGateway.Text = currentPortInfo.robotGateway;
-                    label_robotDns.Text = currentPortInfo.robotDns;
-                    label_robotType.Text = currentPortInfo.robotType;
-                    label_portIp2.Text = currentPortInfo.portIp;
+                    label_deviceType.Text = currentPortInfo.deviceType;
+
+                    if (Util.valid(currentPortInfo.robotIp))
+                    {
+                        tabPage_robot.Tag = false;
+                        label_robotIp.Text = currentPortInfo.robotIp;
+                        label_robotGateway.Text = currentPortInfo.robotGateway;
+                        label_robotDns.Text = currentPortInfo.robotDns;
+                        label_robotType.Text = currentPortInfo.robotType;
+                        label_portIp2.Text = currentPortInfo.portIp;
+                    }
+                    else
+                    {
+                        tabPage_robot.Tag = true;
+                    }
                 }
                 else
                 {
@@ -1021,7 +990,96 @@ namespace Android_ADB_Tool
         /** 连接设备*/
         private void bt_device_connect_Click(object sender, EventArgs e)
         {
+            if (radioButton6.Checked)
+            {
+                adbCloseTimer = 0;
+                int result = Util.connectADB(cmdUtils, bt_device_connect, null, tb_deviceIp, timer2);
+                if (result == 0)
+                {
+                    //连接成功
+                    tb_parking_id.Enabled = false;
+                    button_query_parking.Enabled = false;
+                    comboBox_portName.Enabled = false;
+                    radioButton5.Enabled = false;
+                    bt_device_put.Enabled = true;
 
+                    Console.WriteLine("读取网络配置文件");
+                    tb_deviceCode.Text = "";
+                    Boolean isSuccess = false;
+                    string line = "";
+                    string netConfigPath = "netConfig.properties";
+                    sr = cmdUtils.RunCmd("adb -s " + getDeviceId() + " pull sdcard/A3PlusEnd/netConfig.properties " + netConfigPath);
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        Console.WriteLine(line);
+                        if (line.Contains("1 file pulled."))
+                        {
+                            isSuccess = true;
+                            PropertyOper po = new PropertyOper(netConfigPath);
+                            tb_deviceCode.Text = po["deviceCode"].ToString();
+                            break;
+                        }
+                    }
+                    if (isSuccess)
+                    {
+                        if (Util.valid(currentPortInfo.deviceCode))
+                        {
+                            if (tb_deviceCode.Text.Equals(currentPortInfo.deviceCode))
+                            {
+                                lb_device_bind_result.Text = "已绑定";
+                                lb_device_bind_result.ForeColor = Color.Green;
+                            }
+                            else
+                            {
+                                lb_device_bind_result.Text = "通道已绑定其他设备";
+                                lb_device_bind_result.ForeColor = Color.Red;
+                            }
+
+                        }
+                        else
+                        {
+                            lb_device_bind_result.Text = "未绑定";
+                            lb_device_bind_result.ForeColor = Color.Red;
+                            bt_device_bind.Visible = true;
+                            bt_device_bind.Enabled = true;
+                        }
+
+                    }
+                    else
+                    {
+                        lb_device_bind_result.Text = "获取设备号失败";
+                        lb_device_bind_result.ForeColor = Color.Red;
+
+                    }
+                }
+                else
+                {
+                    tb_parking_id.Enabled = true;
+                    button_query_parking.Enabled = true;
+                    comboBox_portName.Enabled = true;
+                    tb_deviceCode.Text = "";
+                    lb_device_bind_result.Text = "---";
+                    bt_device_put.Enabled = false;
+                    bt_device_bind.Visible = false;
+                    radioButton5.Enabled = true;
+
+                }
+            }
+        }
+
+        /**
+         * 已连接的端到云设备
+         **/
+        private String getDeviceId()
+        {
+            if (radioButton6.Checked)
+            {
+                return tb_deviceIp.Text;
+            }
+            else
+            {
+                return cb_device_usb.SelectedItem.ToString();
+            }
         }
 
         /** 绑定设备*/
@@ -1040,6 +1098,12 @@ namespace Android_ADB_Tool
             if (resultInfo.result == 0)
             {
                 MessageBox.Show("绑定成功", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                lb_device_bind_result.Text = "已绑定";
+                lb_device_bind_result.ForeColor = Color.Green;
+                bt_device_bind.Visible = false;
+                currentPortInfo.deviceCode = tb_deviceCode.Text;
+                label_deviceCode.Text = currentPortInfo.deviceCode;
+                label_deviceCode.ForeColor = Color.Black;
             }
             else
             {
@@ -1052,6 +1116,123 @@ namespace Android_ADB_Tool
         private void bt_device_put_Click(object sender, EventArgs e)
         {
 
+            if (MessageBox.Show("配置网络将重启android系统，是否配置？", "消息提示", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                ProcessMsgBox processMsgBox = new ProcessMsgBox();
+                processMsgBox.Show("正在配置，请稍后...");
+                bt_device_put.Enabled = false;
+                Boolean isSuccess = false;
+                string line = "";
+                sr = cmdUtils.RunCmd("adb -s " + getDeviceId() + " shell am broadcast -a com.ajb.a3plus.netconfig --es ip " + label_portIp.Text
+                    + " --es gateway " + label_portGatway.Text + " --es dns " + label_portDns.Text);
+                while ((line = sr.ReadLine()) != null)
+                {
+                    Console.WriteLine(line);
+                    if (line.Contains("act=com.ajb.a3plus.netconfig"))
+                    {
+                        bt_device_connect.Text = "连接";
+                        bt_device_connect.BackColor = Color.Green;
+                        tb_deviceIp.Enabled = true;
+                        cb_device_usb.Enabled = true;
+                        radioButton5.Enabled = true;
+                        tb_deviceCode.Text = "";
+                        lb_device_bind_result.Text = "---";
+
+                        isSuccess = true;
+                        processMsgBox.Close();
+                        MessageBox.Show("配置成功，请等待终端启动", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        break;
+                    }
+                }
+                sr.Close();
+                if (!isSuccess)
+                {
+                    processMsgBox.Close();
+                    MessageBox.Show("配置失败", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            bt_device_put.Enabled = true;
+
+        }
+
+        /**
+         * 切换成IP连接
+         */
+        private void radioButton6_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!radioButton6.Checked)
+            {
+                return;
+            }
+            tb_deviceIp.Enabled = true;
+            cb_device_usb.Enabled = false;
+
+        }
+
+        /**
+         * 切换成USB连接
+         */
+        private void radioButton5_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!radioButton5.Checked)
+            {
+                return;
+            }
+
+            tb_deviceIp.Enabled = false;
+            cb_device_usb.Enabled = true;
+            cb_device_usb.Items.Clear();
+
+            ProcessMsgBox processMsgBox = new ProcessMsgBox();
+            processMsgBox.Show("正在查找，请稍后...");
+            Boolean isSuccess = false;
+            string line = "";
+            sr = cmdUtils.RunCmd("adb devices");
+            while ((line = sr.ReadLine()) != null)
+            {
+                Console.WriteLine(line);
+                if (line.Contains("List of devices attached"))
+                {
+                    isSuccess = true;
+                }
+                if (line.Contains("device") && !line.Contains("devices") && !line.Contains(":5555"))
+                {
+                    cb_device_usb.Items.Add(line.Substring(0, line.IndexOf("device")).Trim());
+                }
+            }
+            processMsgBox.Close();
+            if (isSuccess)
+            {
+                if (cb_device_usb.Items.Count > 0)
+                {
+                    cb_device_usb.SelectedIndex = 0;
+                }
+            }
+            else
+            {
+                MessageBox.Show("查找失败", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        private void tabControl2_Selecting(object sender, TabControlCancelEventArgs e)
+        {
+            if (e.TabPageIndex == 1 && Convert.ToBoolean(e.TabPage.Tag))
+            {
+                Console.WriteLine("tabControl2_Selecting");
+                MessageBox.Show("通道未配置机器人", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                e.Cancel = true;
+            }
+        }
+
+        private void tabPage_robot_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("tabPage_robot_Click");
+        }
+
+        private void tabControl2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Console.WriteLine("tabControl2_SelectedIndexChanged");
         }
     }
 }

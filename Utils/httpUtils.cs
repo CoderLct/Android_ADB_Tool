@@ -14,7 +14,7 @@ namespace Android_ADB_Tool.Utils
 {
     class HttpUtils
     {
-        private const string SERVER_BASE_URL = "device-cloud.dyajb.com";  //api服务测试地址
+        private const string SERVER_BASE_URL = "192.168.41.64:8001";  //api服务测试地址device-cloud.dyajb.com
         private const string APP_ID = "appid";  //分配ID
         private const string TIMESTAMP = "timestamp";  //时间戳
         private const string NONCE = "nonce";  //流水号
@@ -39,17 +39,28 @@ namespace Android_ADB_Tool.Utils
          */
         public static ResultInfo<ParkingInfo> QueryParking(Hashtable ht)
         {
-            string pathUrl = "https://" + SERVER_BASE_URL + "/deviceCloud/tool/ports";
+            string pathUrl = "http://" + SERVER_BASE_URL + "/deviceCloud/tool/ports";
+            if (ht != null && ht.Count != 0)
+            {
+                pathUrl = pathUrl + "?";
+                ICollection key = ht.Keys;
+                foreach (string k in key)
+                {
+                    pathUrl = pathUrl + k + "=" + ht[k] + "&";
+                }
+                pathUrl = pathUrl.Remove(pathUrl.Length - 1, 1);
+
+            }
             return HttpGet(pathUrl, ht);
 
         }
 
         /**
-         * 通过车场ID查询车场信息
+         * 设备绑定
          */
         public static ResultInfo<string> BindPort(Hashtable ht)
         {
-            string pathUrl = "https://" + SERVER_BASE_URL + "/deviceCloud/tool/bindport";
+            string pathUrl = "http://" + SERVER_BASE_URL + "/deviceCloud/tool/bindport";
             JavaScriptSerializer jss = new JavaScriptSerializer();
             return HttpPost(pathUrl, jss.Serialize(ht));
 
@@ -77,17 +88,18 @@ namespace Android_ADB_Tool.Utils
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 request.Method = "GET";
-                request.ContentType = "application/json; charset=utf-8";  //application/x-www-form-urlencoded
+                request.ContentType = "application/json; charset=utf-8";
                 request.Headers.Add(APP_ID, (string)hs[APP_ID]);
                 request.Headers.Add(TIMESTAMP, (string)hs[TIMESTAMP]);
                 request.Headers.Add(NONCE, (string)hs[NONCE]);
                 request.Headers.Add(SIGNATURE, getSignature(hs));
-                
-                Stream myRequestStream = request.GetRequestStream();
-                StreamWriter myStreamWriter = new StreamWriter(myRequestStream, Encoding.GetEncoding("gb2312"));
-                myStreamWriter.Write(jss.Serialize(ht));
-                myStreamWriter.Close();
 
+                //Stream myRequestStream = request.GetRequestStream();
+                //StreamWriter myStreamWriter = new StreamWriter(myRequestStream, Encoding.GetEncoding("gb2312"));
+                //myStreamWriter.Write(jss.Serialize(ht));
+                //myStreamWriter.Close();
+
+                Console.WriteLine("GET请求：" + url);
                 Console.WriteLine("GET请求：" + jss.Serialize(request));
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 

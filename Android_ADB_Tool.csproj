@@ -68,6 +68,7 @@
     <Compile Include="Utils\HttpUtils.cs" />
     <Compile Include="Utils\PropertyOper.cs" />
     <Compile Include="Entity\ResultInfo.cs" />
+    <Compile Include="Utils\Util.cs" />
     <EmbeddedResource Include="Forms\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>

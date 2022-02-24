@@ -131,12 +131,12 @@
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.tb_deviceCode = new System.Windows.Forms.TextBox();
             this.bt_device_bind = new System.Windows.Forms.Button();
-            this.label19 = new System.Windows.Forms.Label();
+            this.lb_device_bind_result = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.comboBox5 = new System.Windows.Forms.ComboBox();
-            this.comboBox6 = new System.Windows.Forms.ComboBox();
+            this.tb_deviceIp = new System.Windows.Forms.TextBox();
+            this.cb_device_usb = new System.Windows.Forms.ComboBox();
             this.radioButton5 = new System.Windows.Forms.RadioButton();
             this.bt_device_connect = new System.Windows.Forms.Button();
             this.radioButton6 = new System.Windows.Forms.RadioButton();
@@ -904,7 +904,7 @@
             // label_portId
             // 
             this.label_portId.AutoSize = true;
-            this.label_portId.Location = new System.Drawing.Point(87, 85);
+            this.label_portId.Location = new System.Drawing.Point(248, 85);
             this.label_portId.Name = "label_portId";
             this.label_portId.Size = new System.Drawing.Size(17, 12);
             this.label_portId.TabIndex = 54;
@@ -922,7 +922,7 @@
             // label_parkName
             // 
             this.label_parkName.AutoSize = true;
-            this.label_parkName.Location = new System.Drawing.Point(260, 60);
+            this.label_parkName.Location = new System.Drawing.Point(248, 60);
             this.label_parkName.Name = "label_parkName";
             this.label_parkName.Size = new System.Drawing.Size(17, 12);
             this.label_parkName.TabIndex = 52;
@@ -931,7 +931,7 @@
             // label_portTypeName
             // 
             this.label_portTypeName.AutoSize = true;
-            this.label_portTypeName.Location = new System.Drawing.Point(260, 85);
+            this.label_portTypeName.Location = new System.Drawing.Point(87, 85);
             this.label_portTypeName.Name = "label_portTypeName";
             this.label_portTypeName.Size = new System.Drawing.Size(17, 12);
             this.label_portTypeName.TabIndex = 51;
@@ -940,7 +940,7 @@
             // label_cameraIp2
             // 
             this.label_cameraIp2.AutoSize = true;
-            this.label_cameraIp2.Location = new System.Drawing.Point(261, 110);
+            this.label_cameraIp2.Location = new System.Drawing.Point(251, 110);
             this.label_cameraIp2.Name = "label_cameraIp2";
             this.label_cameraIp2.Size = new System.Drawing.Size(17, 12);
             this.label_cameraIp2.TabIndex = 50;
@@ -950,7 +950,7 @@
             // 
             this.label_deviceCode.AutoSize = true;
             this.label_deviceCode.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label_deviceCode.Location = new System.Drawing.Point(419, 85);
+            this.label_deviceCode.Location = new System.Drawing.Point(423, 110);
             this.label_deviceCode.Name = "label_deviceCode";
             this.label_deviceCode.Size = new System.Drawing.Size(17, 12);
             this.label_deviceCode.TabIndex = 49;
@@ -968,7 +968,7 @@
             // label50
             // 
             this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(200, 110);
+            this.label50.Location = new System.Drawing.Point(190, 110);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(65, 12);
             this.label50.TabIndex = 47;
@@ -977,7 +977,7 @@
             // label49
             // 
             this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(347, 85);
+            this.label49.Location = new System.Drawing.Point(355, 110);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(71, 12);
             this.label49.TabIndex = 46;
@@ -986,7 +986,7 @@
             // label46
             // 
             this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(200, 60);
+            this.label46.Location = new System.Drawing.Point(190, 60);
             this.label46.Name = "label46";
             this.label46.Size = new System.Drawing.Size(59, 12);
             this.label46.TabIndex = 43;
@@ -995,7 +995,7 @@
             // label44
             // 
             this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(30, 85);
+            this.label44.Location = new System.Drawing.Point(190, 85);
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(59, 12);
             this.label44.TabIndex = 41;
@@ -1004,7 +1004,7 @@
             // label43
             // 
             this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(200, 85);
+            this.label43.Location = new System.Drawing.Point(30, 85);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(59, 12);
             this.label43.TabIndex = 40;
@@ -1041,11 +1041,11 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(347, 21);
+            this.label24.Location = new System.Drawing.Point(325, 21);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(35, 12);
+            this.label24.Size = new System.Drawing.Size(59, 12);
             this.label24.TabIndex = 30;
-            this.label24.Text = "通道:";
+            this.label24.Text = "选择通道:";
             // 
             // label23
             // 
@@ -1061,7 +1061,7 @@
             this.comboBox_portName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_portName.Enabled = false;
             this.comboBox_portName.FormattingEnabled = true;
-            this.comboBox_portName.Location = new System.Drawing.Point(388, 15);
+            this.comboBox_portName.Location = new System.Drawing.Point(388, 16);
             this.comboBox_portName.Name = "comboBox_portName";
             this.comboBox_portName.Size = new System.Drawing.Size(121, 20);
             this.comboBox_portName.TabIndex = 28;
@@ -1084,7 +1084,9 @@
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(601, 343);
-            this.tabControl2.TabIndex = 3;
+            this.tabControl2.TabIndex = 2;
+            this.tabControl2.SelectedIndexChanged += new System.EventHandler(this.tabControl2_SelectedIndexChanged);
+            this.tabControl2.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl2_Selecting);
             // 
             // tabPage_device
             // 
@@ -1201,14 +1203,14 @@
             // 
             this.groupBox7.Controls.Add(this.tb_deviceCode);
             this.groupBox7.Controls.Add(this.bt_device_bind);
-            this.groupBox7.Controls.Add(this.label19);
+            this.groupBox7.Controls.Add(this.lb_device_bind_result);
             this.groupBox7.Controls.Add(this.label18);
             this.groupBox7.Location = new System.Drawing.Point(0, 114);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(590, 80);
             this.groupBox7.TabIndex = 11;
             this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "步骤二：控制机绑定通道";
+            this.groupBox7.Text = "步骤二：通道绑定控制机";
             // 
             // tb_deviceCode
             // 
@@ -1232,15 +1234,16 @@
             this.bt_device_bind.UseVisualStyleBackColor = true;
             this.bt_device_bind.Click += new System.EventHandler(this.bt_device_bind_Click);
             // 
-            // label19
+            // lb_device_bind_result
             // 
-            this.label19.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label19.Location = new System.Drawing.Point(349, 36);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(85, 22);
-            this.label19.TabIndex = 34;
-            this.label19.Text = "---";
-            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lb_device_bind_result.AutoSize = true;
+            this.lb_device_bind_result.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lb_device_bind_result.Location = new System.Drawing.Point(350, 42);
+            this.lb_device_bind_result.Name = "lb_device_bind_result";
+            this.lb_device_bind_result.Size = new System.Drawing.Size(23, 12);
+            this.lb_device_bind_result.TabIndex = 34;
+            this.lb_device_bind_result.Text = "---";
+            this.lb_device_bind_result.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label18
             // 
@@ -1263,8 +1266,8 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.comboBox5);
-            this.panel2.Controls.Add(this.comboBox6);
+            this.panel2.Controls.Add(this.tb_deviceIp);
+            this.panel2.Controls.Add(this.cb_device_usb);
             this.panel2.Controls.Add(this.radioButton5);
             this.panel2.Controls.Add(this.bt_device_connect);
             this.panel2.Controls.Add(this.radioButton6);
@@ -1273,26 +1276,24 @@
             this.panel2.Size = new System.Drawing.Size(496, 49);
             this.panel2.TabIndex = 24;
             // 
-            // comboBox5
+            // tb_deviceIp
             // 
-            this.comboBox5.DropDownWidth = 122;
-            this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.IntegralHeight = false;
-            this.comboBox5.ItemHeight = 12;
-            this.comboBox5.Location = new System.Drawing.Point(60, 15);
-            this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(122, 20);
-            this.comboBox5.TabIndex = 24;
+            this.tb_deviceIp.Location = new System.Drawing.Point(66, 14);
+            this.tb_deviceIp.MaxLength = 15;
+            this.tb_deviceIp.Name = "tb_deviceIp";
+            this.tb_deviceIp.Size = new System.Drawing.Size(112, 21);
+            this.tb_deviceIp.TabIndex = 28;
+            this.tb_deviceIp.Tag = "";
             // 
-            // comboBox6
+            // cb_device_usb
             // 
-            this.comboBox6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox6.Enabled = false;
-            this.comboBox6.FormattingEnabled = true;
-            this.comboBox6.Location = new System.Drawing.Point(259, 15);
-            this.comboBox6.Name = "comboBox6";
-            this.comboBox6.Size = new System.Drawing.Size(121, 20);
-            this.comboBox6.TabIndex = 15;
+            this.cb_device_usb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_device_usb.Enabled = false;
+            this.cb_device_usb.FormattingEnabled = true;
+            this.cb_device_usb.Location = new System.Drawing.Point(259, 15);
+            this.cb_device_usb.Name = "cb_device_usb";
+            this.cb_device_usb.Size = new System.Drawing.Size(121, 20);
+            this.cb_device_usb.TabIndex = 15;
             // 
             // radioButton5
             // 
@@ -1304,6 +1305,7 @@
             this.radioButton5.TabIndex = 14;
             this.radioButton5.Text = "USB";
             this.radioButton5.UseVisualStyleBackColor = true;
+            this.radioButton5.CheckedChanged += new System.EventHandler(this.radioButton5_CheckedChanged);
             // 
             // bt_device_connect
             // 
@@ -1329,11 +1331,13 @@
             this.radioButton6.TabStop = true;
             this.radioButton6.Text = "IP";
             this.radioButton6.UseVisualStyleBackColor = true;
+            this.radioButton6.CheckedChanged += new System.EventHandler(this.radioButton6_CheckedChanged);
             // 
             // tabPage_robot
             // 
             this.tabPage_robot.Controls.Add(this.groupBox9);
             this.tabPage_robot.Controls.Add(this.groupBox11);
+            this.tabPage_robot.ForeColor = System.Drawing.SystemColors.ControlText;
             this.tabPage_robot.Location = new System.Drawing.Point(4, 22);
             this.tabPage_robot.Name = "tabPage_robot";
             this.tabPage_robot.Padding = new System.Windows.Forms.Padding(3);
@@ -1341,6 +1345,7 @@
             this.tabPage_robot.TabIndex = 2;
             this.tabPage_robot.Text = "机器人参数";
             this.tabPage_robot.UseVisualStyleBackColor = true;
+            this.tabPage_robot.Click += new System.EventHandler(this.tabPage_robot_Click);
             // 
             // groupBox9
             // 
@@ -1543,9 +1548,9 @@
             this.label29.ForeColor = System.Drawing.Color.Maroon;
             this.label29.Location = new System.Drawing.Point(8, 507);
             this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(269, 12);
+            this.label29.Size = new System.Drawing.Size(353, 12);
             this.label29.TabIndex = 23;
-            this.label29.Text = "注：只适用于安装了端到云APK( V1.3.6+ )的终端";
+            this.label29.Text = "注. 控制机初始IP:192.168.9.101，机器人初始IP:192.168.9.102";
             // 
             // Form1
             // 
@@ -1683,14 +1688,13 @@
         private System.Windows.Forms.ComboBox comboBox_portName;
         private System.Windows.Forms.TextBox tb_parking_id;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.ComboBox comboBox5;
-        private System.Windows.Forms.ComboBox comboBox6;
+        private System.Windows.Forms.ComboBox cb_device_usb;
         private System.Windows.Forms.RadioButton radioButton5;
         private System.Windows.Forms.RadioButton radioButton6;
         private System.Windows.Forms.Button bt_device_connect;
         private System.Windows.Forms.TextBox tb_deviceCode;
         private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label lb_device_bind_result;
         private System.Windows.Forms.Button bt_device_put;
         private System.Windows.Forms.Button bt_device_bind;
         private System.Windows.Forms.Label label20;
@@ -1737,6 +1741,7 @@
         private System.Windows.Forms.Label label_cameraIp2;
         private System.Windows.Forms.Label label_deviceCode;
         private System.Windows.Forms.Label label_ltdCode;
+        private System.Windows.Forms.TextBox tb_deviceIp;
     }
 }
 
