@@ -20,7 +20,7 @@ namespace Android_ADB_Tool.Utils
         /**
          * 连接设备 0：连接成功，1：连接失败，2：断开成功，3：断开失败
          **/
-        public static int connectADB(CMDUtils cmdUtils, 
+        public static int ConnectADB(CMDUtils cmdUtils, 
             Button button, 
             ComboBox comboBox, 
             TextBox textBox, 
@@ -82,7 +82,14 @@ namespace Android_ADB_Tool.Utils
             else
             {
                 Console.WriteLine("断开");
-                sr = cmdUtils.RunCmd("adb disconnect");
+                if (comboBox != null)
+                {
+                    sr = cmdUtils.RunCmd("adb disconnect " + comboBox.Text);
+                }
+                else if (textBox != null)
+                {
+                    sr = cmdUtils.RunCmd("adb disconnect " + textBox.Text);
+                }
                 while ((line = sr.ReadLine()) != null)
                 {
                     if (line.Contains("disconnected"))
@@ -131,6 +138,55 @@ namespace Android_ADB_Tool.Utils
                 sw.WriteLine(ip);
                 sw.Close();
             }
+        }
+
+        public static void QueryDevices(CMDUtils cmdUtils,
+            ComboBox cbIP, 
+            TextBox tbIP,
+            ComboBox cbDevices )
+        {
+
+            if (cbIP != null)
+            {
+                cbIP.Enabled = false;
+            }else if (tbIP != null)
+            {
+                tbIP.Enabled = false;
+            }
+            cbDevices.Enabled = true;
+            cbDevices.Items.Clear();
+
+            ProcessMsgBox processMsgBox = new ProcessMsgBox();
+            processMsgBox.Show("正在查找，请稍后...");
+            Boolean isSuccess = false;
+            string line = "";
+            StreamReader sr = cmdUtils.RunCmd("adb devices");
+            while ((line = sr.ReadLine()) != null)
+            {
+                Console.WriteLine(line);
+                if (line.Contains("List of devices attached"))
+                {
+                    isSuccess = true;
+                }
+                if (line.Contains("device") && !line.Contains("devices") && !line.Contains(":5555"))
+                {
+                    cbDevices.Items.Add(line.Substring(0, line.IndexOf("device")).Trim());
+                }
+            }
+            processMsgBox.Close();
+            if (isSuccess)
+            {
+                if (cbDevices.Items.Count > 0)
+                {
+                    cbDevices.SelectedIndex = 0;
+                }
+            }
+            else
+            {
+                MessageBox.Show("查找失败", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            sr.Close();
+
         }
     }
 }

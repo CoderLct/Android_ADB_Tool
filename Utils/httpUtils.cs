@@ -14,7 +14,7 @@ namespace Android_ADB_Tool.Utils
 {
     class HttpUtils
     {
-        private const string SERVER_BASE_URL = "192.168.41.64:8001";  //api服务测试地址device-cloud.dyajb.com
+        private const string SERVER_BASE_URL = "192.168.41.64:8001";  //api服务测试地址  device-cloud.dyajb.com
         private const string APP_ID = "appid";  //分配ID
         private const string TIMESTAMP = "timestamp";  //时间戳
         private const string NONCE = "nonce";  //流水号
