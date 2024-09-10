@@ -14,7 +14,8 @@ namespace Android_ADB_Tool.Utils
 {
     class HttpUtils
     {
-        private const string SERVER_BASE_URL = "192.168.41.64:8001";  //api服务测试地址  device-cloud.dyajb.com
+        public const string SERVER_BASE_URL_OFFICIAL = "devicecloudapi.ajbcloud.com";  //api服务正式地址  
+        public const string SERVER_BASE_URL_TEST = "device-cloud.dyajb.com";  //api服务测试地址  
         private const string APP_ID = "appid";  //分配ID
         private const string TIMESTAMP = "timestamp";  //时间戳
         private const string NONCE = "nonce";  //流水号
@@ -23,7 +24,9 @@ namespace Android_ADB_Tool.Utils
 
         private const string APP_ID_VALUE = "device_config_tool";  //分配ID值  divice_cloud_android_app
         private const string APP_SECRET = "7201b1dc-afd9-3b00-9dc2-a1dda52a3a3a";  //key  2ff9d4a4-1b10-44e3-aa8a-2bf383c84585
-        
+
+        public static string SERVER_BASE_URL = SERVER_BASE_URL_OFFICIAL;
+
         /**
          * 测试接口
          */
@@ -39,7 +42,7 @@ namespace Android_ADB_Tool.Utils
          */
         public static ResultInfo<ParkingInfo> QueryParking(Hashtable ht)
         {
-            string pathUrl = "http://" + SERVER_BASE_URL + "/deviceCloud/tool/ports";
+            string pathUrl = "https://" + SERVER_BASE_URL + "/deviceCloud/tool/ports";
             if (ht != null && ht.Count != 0)
             {
                 pathUrl = pathUrl + "?";
@@ -60,7 +63,7 @@ namespace Android_ADB_Tool.Utils
          */
         public static ResultInfo<string> BindPort(Hashtable ht)
         {
-            string pathUrl = "http://" + SERVER_BASE_URL + "/deviceCloud/tool/bindport";
+            string pathUrl = "https://" + SERVER_BASE_URL + "/deviceCloud/tool/bindport";
             JavaScriptSerializer jss = new JavaScriptSerializer();
             return HttpPost(pathUrl, jss.Serialize(ht));
 

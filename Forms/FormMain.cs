@@ -120,17 +120,26 @@ namespace Android_ADB_Tool
             }
             else
             {
-                button1.Enabled = false;
                 if (comboBox1.Items.Count != 0)
                 {
-                    button1.Text = "断开";
-                    button1.BackColor = Color.Red;
+                    if (button1.Text.Equals("连接"))
+                    {
+                        button1.Text = "断开";
+                        button1.BackColor = Color.Red;
+                        comboBox1.Enabled = false;
+
+                    }
+                    else
+                    {
+                        button1.Text = "连接";
+                        button1.BackColor = Color.Green;
+                        comboBox1.Enabled = true;
+                    }
                 }
                 else
                 {
                     MessageBox.Show("未发现USB设备！", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                button1.Enabled = true;
             }
         }
 
@@ -768,9 +777,9 @@ namespace Android_ADB_Tool
         private void button_query_parking_Click(object sender, EventArgs e)
         {
             clearConfigUI();
-            if (tb_parking_id.Text.Length < 11)
+            if (tb_parking_id.Text.Length > 30)
             {
-                MessageBox.Show("请输入完整11位车场编号", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("请输入正确的车场编号", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -836,19 +845,20 @@ namespace Android_ADB_Tool
                     {
                         label_deviceCode.Text = "未绑定设备";
                         label_deviceCode.ForeColor = Color.Red;
-                        tb_deviceIp.Text = "192.168.9.101";
+                        //tb_deviceIp.Text = "192.168.9.101";
                         bt_device_bind.Visible = true;
                     }
                     else
                     {
                         label_deviceCode.Text = currentPortInfo.deviceCode;
                         label_deviceCode.ForeColor = Color.Black;
-                        tb_deviceIp.Text = currentPortInfo.portIp;
+                        //tb_deviceIp.Text = currentPortInfo.portIp;
                         bt_device_bind.Visible = false;
                     }
                     label_cameraIp.Text = currentPortInfo.cameraIp;
                     label_cameraIp2.Text = Util.valid(currentPortInfo.cameraIp2)? currentPortInfo.cameraIp2 : "--";
                     label_portIp.Text = currentPortInfo.portIp;
+                    tb_deviceIp.Text = currentPortInfo.portIp;
                     tb_deviceIp.Enabled = true;
                     radioButton5.Enabled = true;
                     bt_device_connect.Enabled = true;
@@ -1129,6 +1139,9 @@ namespace Android_ADB_Tool
                         radioButton5.Enabled = true;
                         tb_deviceCode.Text = "";
                         lb_device_bind_result.Text = "---";
+                        tb_parking_id.Enabled = true;
+                        button_query_parking.Enabled = true;
+                        comboBox_portName.Enabled = true;
 
                         isSuccess = true;
                         processMsgBox.Close();
@@ -1328,6 +1341,20 @@ namespace Android_ADB_Tool
             if (e.KeyCode == Keys.Enter)
             {
                 button_query_parking.PerformClick();
+            }
+        }
+
+        private void label23_DoubleClick(object sender, EventArgs e)
+        {
+            if (Text.Contains("测试"))
+            {
+                Text = Text.Substring(0, Text.Length - 3);
+                HttpUtils.SERVER_BASE_URL = HttpUtils.SERVER_BASE_URL_OFFICIAL;
+            }
+            else
+            {
+                Text = Text + "_测试";
+                HttpUtils.SERVER_BASE_URL = HttpUtils.SERVER_BASE_URL_TEST;
             }
         }
     }

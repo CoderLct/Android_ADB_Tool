@@ -900,6 +900,7 @@
             this.label23.Size = new System.Drawing.Size(59, 12);
             this.label23.TabIndex = 29;
             this.label23.Text = "车场编号:";
+            this.label23.DoubleClick += new System.EventHandler(this.label23_DoubleClick);
             // 
             // comboBox_portName
             // 
@@ -1427,7 +1428,7 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ADB工具";
+            this.Text = "ADB工具v2.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
