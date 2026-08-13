@@ -29,13 +29,16 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panel1 = new System.Windows.Forms.Panel();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.button9 = new System.Windows.Forms.Button();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.button1 = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -69,6 +72,8 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.button12 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.button11 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
@@ -80,8 +85,10 @@
             this.panel_general = new System.Windows.Forms.Panel();
             this.label_menu_general = new System.Windows.Forms.Label();
             this.label_menu_config = new System.Windows.Forms.Label();
+            this.label_menu_search = new System.Windows.Forms.Label();
             this.label_menu_general1 = new System.Windows.Forms.Label();
             this.label_menu_config1 = new System.Windows.Forms.Label();
+            this.label_menu_search1 = new System.Windows.Forms.Label();
             this.panel_config = new System.Windows.Forms.Panel();
             this.label_portId = new System.Windows.Forms.Label();
             this.label_cameraIp = new System.Windows.Forms.Label();
@@ -147,6 +154,20 @@
             this.bt_robot_connect = new System.Windows.Forms.Button();
             this.radioButton8 = new System.Windows.Forms.RadioButton();
             this.label29 = new System.Windows.Forms.Label();
+            this.panel_search = new System.Windows.Forms.Panel();
+            this.groupBox_search = new System.Windows.Forms.GroupBox();
+            this.bt_search_upgrade = new System.Windows.Forms.Button();
+            this.bt_search_apk_browse = new System.Windows.Forms.Button();
+            this.tb_search_apk_path = new System.Windows.Forms.TextBox();
+            this.label_search_path = new System.Windows.Forms.Label();
+            this.label_search_selected_ip = new System.Windows.Forms.Label();
+            this.label_search_selected_ip_title = new System.Windows.Forms.Label();
+            this.dgv_search_devices = new System.Windows.Forms.DataGridView();
+            this.col_search_ip = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_search_mac = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_search_type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_search_version = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bt_search_listen = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -171,6 +192,9 @@
             this.groupBox9.SuspendLayout();
             this.groupBox11.SuspendLayout();
             this.panel4.SuspendLayout();
+            this.panel_search.SuspendLayout();
+            this.groupBox_search.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_search_devices)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -178,8 +202,8 @@
             this.panel1.Controls.Add(this.comboBox2);
             this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Controls.Add(this.radioButton2);
-            this.panel1.Controls.Add(this.radioButton1);
             this.panel1.Controls.Add(this.button9);
+            this.panel1.Controls.Add(this.radioButton1);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
@@ -192,7 +216,7 @@
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.IntegralHeight = false;
             this.comboBox2.ItemHeight = 12;
-            this.comboBox2.Location = new System.Drawing.Point(60, 15);
+            this.comboBox2.Location = new System.Drawing.Point(225, 14);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(122, 20);
             this.comboBox2.TabIndex = 24;
@@ -202,22 +226,33 @@
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.Enabled = false;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(252, 15);
+            this.comboBox1.Location = new System.Drawing.Point(225, 14);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 20);
             this.comboBox1.TabIndex = 15;
+            this.comboBox1.Visible = false;
             // 
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
             this.radioButton2.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.radioButton2.Location = new System.Drawing.Point(208, 16);
+            this.radioButton2.Location = new System.Drawing.Point(117, 17);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(44, 16);
             this.radioButton2.TabIndex = 14;
             this.radioButton2.Text = "USB";
             this.radioButton2.UseVisualStyleBackColor = true;
             this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(515, 26);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(75, 23);
+            this.button9.TabIndex = 12;
+            this.button9.Text = "重启终端";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
             // radioButton1
             // 
@@ -233,23 +268,13 @@
             this.radioButton1.UseVisualStyleBackColor = true;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
-            // button9
-            // 
-            this.button9.Location = new System.Drawing.Point(524, 26);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(75, 23);
-            this.button9.TabIndex = 12;
-            this.button9.Text = "重启终端";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
-            // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.Green;
             this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(391, 11);
+            this.button1.Location = new System.Drawing.Point(349, 10);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(55, 27);
+            this.button1.Size = new System.Drawing.Size(55, 28);
             this.button1.TabIndex = 2;
             this.button1.Text = "连接";
             this.button1.UseVisualStyleBackColor = false;
@@ -581,6 +606,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label11);
+            this.groupBox4.Controls.Add(this.button12);
             this.groupBox4.Controls.Add(this.label6);
             this.groupBox4.Controls.Add(this.button11);
             this.groupBox4.Controls.Add(this.label5);
@@ -592,10 +619,30 @@
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             // 
+            // label11
+            // 
+            this.label11.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label11.Location = new System.Drawing.Point(2, 128);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(141, 22);
+            this.label11.TabIndex = 8;
+            this.label11.Text = "---";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(32, 100);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(75, 23);
+            this.button12.TabIndex = 7;
+            this.button12.Text = "返回桌面";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
+            // 
             // label6
             // 
             this.label6.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label6.Location = new System.Drawing.Point(0, 203);
+            this.label6.Location = new System.Drawing.Point(2, 249);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(141, 22);
             this.label6.TabIndex = 6;
@@ -604,7 +651,7 @@
             // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(34, 163);
+            this.button11.Location = new System.Drawing.Point(34, 223);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(75, 23);
             this.button11.TabIndex = 5;
@@ -636,7 +683,7 @@
             // label4
             // 
             this.label4.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label4.Location = new System.Drawing.Point(2, 69);
+            this.label4.Location = new System.Drawing.Point(0, 55);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(141, 22);
             this.label4.TabIndex = 3;
@@ -668,11 +715,11 @@
             // label_menu_general
             // 
             this.label_menu_general.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.label_menu_general.Font = new System.Drawing.Font("华文宋体", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_menu_general.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label_menu_general.Location = new System.Drawing.Point(0, 0);
             this.label_menu_general.Name = "label_menu_general";
             this.label_menu_general.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label_menu_general.Size = new System.Drawing.Size(41, 264);
+            this.label_menu_general.Size = new System.Drawing.Size(41, 177);
             this.label_menu_general.TabIndex = 6;
             this.label_menu_general.Text = "通用";
             this.label_menu_general.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -681,24 +728,37 @@
             // label_menu_config
             // 
             this.label_menu_config.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.label_menu_config.Font = new System.Drawing.Font("华文宋体", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label_menu_config.Location = new System.Drawing.Point(0, 266);
+            this.label_menu_config.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_menu_config.Location = new System.Drawing.Point(0, 177);
             this.label_menu_config.Name = "label_menu_config";
             this.label_menu_config.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label_menu_config.Size = new System.Drawing.Size(41, 264);
+            this.label_menu_config.Size = new System.Drawing.Size(41, 177);
             this.label_menu_config.TabIndex = 7;
-            this.label_menu_config.Text = "配置";
+            this.label_menu_config.Text = "端到云";
             this.label_menu_config.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label_menu_config.Click += new System.EventHandler(this.label_menu_config_Click);
+            // 
+            // label_menu_search
+            // 
+            this.label_menu_search.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.label_menu_search.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_menu_search.Location = new System.Drawing.Point(0, 354);
+            this.label_menu_search.Name = "label_menu_search";
+            this.label_menu_search.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label_menu_search.Size = new System.Drawing.Size(41, 176);
+            this.label_menu_search.TabIndex = 11;
+            this.label_menu_search.Text = "引导屏";
+            this.label_menu_search.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label_menu_search.Click += new System.EventHandler(this.label_menu_search_Click);
             // 
             // label_menu_general1
             // 
             this.label_menu_general1.BackColor = System.Drawing.SystemColors.Control;
-            this.label_menu_general1.Font = new System.Drawing.Font("华文宋体", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_menu_general1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label_menu_general1.Location = new System.Drawing.Point(0, 0);
             this.label_menu_general1.Name = "label_menu_general1";
             this.label_menu_general1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label_menu_general1.Size = new System.Drawing.Size(50, 264);
+            this.label_menu_general1.Size = new System.Drawing.Size(50, 177);
             this.label_menu_general1.TabIndex = 8;
             this.label_menu_general1.Text = "通用";
             this.label_menu_general1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -706,15 +766,28 @@
             // label_menu_config1
             // 
             this.label_menu_config1.BackColor = System.Drawing.SystemColors.Control;
-            this.label_menu_config1.Font = new System.Drawing.Font("华文宋体", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label_menu_config1.Location = new System.Drawing.Point(0, 266);
+            this.label_menu_config1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_menu_config1.Location = new System.Drawing.Point(0, 177);
             this.label_menu_config1.Name = "label_menu_config1";
             this.label_menu_config1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label_menu_config1.Size = new System.Drawing.Size(50, 264);
+            this.label_menu_config1.Size = new System.Drawing.Size(50, 177);
             this.label_menu_config1.TabIndex = 9;
-            this.label_menu_config1.Text = "配置";
+            this.label_menu_config1.Text = "端到云";
             this.label_menu_config1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label_menu_config1.Visible = false;
+            // 
+            // label_menu_search1
+            // 
+            this.label_menu_search1.BackColor = System.Drawing.SystemColors.Control;
+            this.label_menu_search1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_menu_search1.Location = new System.Drawing.Point(0, 354);
+            this.label_menu_search1.Name = "label_menu_search1";
+            this.label_menu_search1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label_menu_search1.Size = new System.Drawing.Size(50, 176);
+            this.label_menu_search1.TabIndex = 12;
+            this.label_menu_search1.Text = "引导屏";
+            this.label_menu_search1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label_menu_search1.Visible = false;
             // 
             // panel_config
             // 
@@ -1406,6 +1479,167 @@
             this.label29.TabIndex = 23;
             this.label29.Text = "注. 控制机初始IP:192.168.9.101，机器人初始IP:192.168.9.102";
             // 
+            // panel_search
+            // 
+            this.panel_search.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_search.Controls.Add(this.groupBox_search);
+            this.panel_search.Controls.Add(this.dgv_search_devices);
+            this.panel_search.Controls.Add(this.bt_search_listen);
+            this.panel_search.Location = new System.Drawing.Point(42, 0);
+            this.panel_search.Name = "panel_search";
+            this.panel_search.Size = new System.Drawing.Size(611, 530);
+            this.panel_search.TabIndex = 13;
+            this.panel_search.Visible = false;
+            // 
+            // groupBox_search
+            // 
+            this.groupBox_search.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox_search.Controls.Add(this.bt_search_upgrade);
+            this.groupBox_search.Controls.Add(this.bt_search_apk_browse);
+            this.groupBox_search.Controls.Add(this.tb_search_apk_path);
+            this.groupBox_search.Controls.Add(this.label_search_path);
+            this.groupBox_search.Controls.Add(this.label_search_selected_ip);
+            this.groupBox_search.Controls.Add(this.label_search_selected_ip_title);
+            this.groupBox_search.Location = new System.Drawing.Point(10, 335);
+            this.groupBox_search.Name = "groupBox_search";
+            this.groupBox_search.Size = new System.Drawing.Size(590, 143);
+            this.groupBox_search.TabIndex = 2;
+            this.groupBox_search.TabStop = false;
+            this.groupBox_search.Text = "操作面板";
+            // 
+            // bt_search_upgrade
+            // 
+            this.bt_search_upgrade.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.bt_search_upgrade.Location = new System.Drawing.Point(487, 63);
+            this.bt_search_upgrade.Name = "bt_search_upgrade";
+            this.bt_search_upgrade.Size = new System.Drawing.Size(70, 30);
+            this.bt_search_upgrade.TabIndex = 5;
+            this.bt_search_upgrade.Text = "升级";
+            this.bt_search_upgrade.UseVisualStyleBackColor = false;
+            // 
+            // bt_search_apk_browse
+            // 
+            this.bt_search_apk_browse.Location = new System.Drawing.Point(409, 69);
+            this.bt_search_apk_browse.Name = "bt_search_apk_browse";
+            this.bt_search_apk_browse.Size = new System.Drawing.Size(43, 21);
+            this.bt_search_apk_browse.TabIndex = 4;
+            this.bt_search_apk_browse.Text = " ...";
+            this.bt_search_apk_browse.UseVisualStyleBackColor = true;
+            // 
+            // tb_search_apk_path
+            // 
+            this.tb_search_apk_path.Location = new System.Drawing.Point(68, 69);
+            this.tb_search_apk_path.Name = "tb_search_apk_path";
+            this.tb_search_apk_path.Size = new System.Drawing.Size(341, 21);
+            this.tb_search_apk_path.TabIndex = 3;
+            // 
+            // label_search_path
+            // 
+            this.label_search_path.AutoSize = true;
+            this.label_search_path.Location = new System.Drawing.Point(27, 72);
+            this.label_search_path.Name = "label_search_path";
+            this.label_search_path.Size = new System.Drawing.Size(35, 12);
+            this.label_search_path.TabIndex = 2;
+            this.label_search_path.Text = "path:";
+            // 
+            // label_search_selected_ip
+            // 
+            this.label_search_selected_ip.AutoSize = true;
+            this.label_search_selected_ip.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_search_selected_ip.Location = new System.Drawing.Point(104, 23);
+            this.label_search_selected_ip.Name = "label_search_selected_ip";
+            this.label_search_selected_ip.Size = new System.Drawing.Size(25, 16);
+            this.label_search_selected_ip.TabIndex = 1;
+            this.label_search_selected_ip.Text = "--";
+            // 
+            // label_search_selected_ip_title
+            // 
+            this.label_search_selected_ip_title.AutoSize = true;
+            this.label_search_selected_ip_title.Location = new System.Drawing.Point(28, 27);
+            this.label_search_selected_ip_title.Name = "label_search_selected_ip_title";
+            this.label_search_selected_ip_title.Size = new System.Drawing.Size(71, 12);
+            this.label_search_selected_ip_title.TabIndex = 0;
+            this.label_search_selected_ip_title.Text = "当前设备IP:";
+            // 
+            // dgv_search_devices
+            // 
+            this.dgv_search_devices.AllowUserToAddRows = false;
+            this.dgv_search_devices.AllowUserToDeleteRows = false;
+            this.dgv_search_devices.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
+            this.dgv_search_devices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgv_search_devices.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgv_search_devices.BackgroundColor = System.Drawing.Color.White;
+            this.dgv_search_devices.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(120)))), ((int)(((byte)(176)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(120)))), ((int)(((byte)(176)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_search_devices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.dgv_search_devices.ColumnHeadersHeight = 32;
+            this.dgv_search_devices.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgv_search_devices.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.col_search_ip,
+            this.col_search_mac,
+            this.col_search_type,
+            this.col_search_version});
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv_search_devices.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dgv_search_devices.EnableHeadersVisualStyles = false;
+            this.dgv_search_devices.Location = new System.Drawing.Point(0, 58);
+            this.dgv_search_devices.MultiSelect = false;
+            this.dgv_search_devices.Name = "dgv_search_devices";
+            this.dgv_search_devices.ReadOnly = true;
+            this.dgv_search_devices.RowHeadersVisible = false;
+            this.dgv_search_devices.RowTemplate.Height = 28;
+            this.dgv_search_devices.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgv_search_devices.Size = new System.Drawing.Size(611, 265);
+            this.dgv_search_devices.TabIndex = 1;
+            // 
+            // col_search_ip
+            // 
+            this.col_search_ip.HeaderText = "设备IP";
+            this.col_search_ip.Name = "col_search_ip";
+            this.col_search_ip.ReadOnly = true;
+            // 
+            // col_search_mac
+            // 
+            this.col_search_mac.HeaderText = "设备MAC";
+            this.col_search_mac.Name = "col_search_mac";
+            this.col_search_mac.ReadOnly = true;
+            // 
+            // col_search_type
+            // 
+            this.col_search_type.HeaderText = "设备类型";
+            this.col_search_type.Name = "col_search_type";
+            this.col_search_type.ReadOnly = true;
+            // 
+            // col_search_version
+            // 
+            this.col_search_version.HeaderText = "版本号";
+            this.col_search_version.Name = "col_search_version";
+            this.col_search_version.ReadOnly = true;
+            // 
+            // bt_search_listen
+            // 
+            this.bt_search_listen.BackColor = System.Drawing.Color.Green;
+            this.bt_search_listen.ForeColor = System.Drawing.Color.White;
+            this.bt_search_listen.Location = new System.Drawing.Point(10, 16);
+            this.bt_search_listen.Name = "bt_search_listen";
+            this.bt_search_listen.Size = new System.Drawing.Size(55, 28);
+            this.bt_search_listen.TabIndex = 0;
+            this.bt_search_listen.Text = "搜索";
+            this.bt_search_listen.UseVisualStyleBackColor = false;
+            // 
             // backgroundWorker1
             // 
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
@@ -1417,18 +1651,21 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(651, 530);
-            this.Controls.Add(this.panel_config);
+            this.Controls.Add(this.label_menu_search1);
             this.Controls.Add(this.label_menu_config1);
             this.Controls.Add(this.label_menu_general1);
+            this.Controls.Add(this.label_menu_search);
             this.Controls.Add(this.label_menu_config);
             this.Controls.Add(this.label_menu_general);
+            this.Controls.Add(this.panel_search);
             this.Controls.Add(this.panel_general);
+            this.Controls.Add(this.panel_config);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ADB工具v2.0";
+            this.Text = "ADB工具v3.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -1463,6 +1700,10 @@
             this.groupBox11.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            this.panel_search.ResumeLayout(false);
+            this.groupBox_search.ResumeLayout(false);
+            this.groupBox_search.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_search_devices)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1518,9 +1759,25 @@
         private System.Windows.Forms.Panel panel_general;
         private System.Windows.Forms.Label label_menu_general;
         private System.Windows.Forms.Label label_menu_config;
+        private System.Windows.Forms.Label label_menu_search;
         private System.Windows.Forms.Label label_menu_general1;
         private System.Windows.Forms.Label label_menu_config1;
+        private System.Windows.Forms.Label label_menu_search1;
         private System.Windows.Forms.Panel panel_config;
+        private System.Windows.Forms.Panel panel_search;
+        private System.Windows.Forms.Button bt_search_listen;
+        private System.Windows.Forms.DataGridView dgv_search_devices;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_search_ip;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_search_mac;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_search_type;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_search_version;
+        private System.Windows.Forms.GroupBox groupBox_search;
+        private System.Windows.Forms.Label label_search_selected_ip_title;
+        private System.Windows.Forms.Label label_search_selected_ip;
+        private System.Windows.Forms.Label label_search_path;
+        private System.Windows.Forms.TextBox tb_search_apk_path;
+        private System.Windows.Forms.Button bt_search_apk_browse;
+        private System.Windows.Forms.Button bt_search_upgrade;
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabPage_device;
         internal System.Windows.Forms.TabPage tabPage_robot;
@@ -1586,6 +1843,8 @@
         private System.Windows.Forms.TextBox tb_deviceIp;
         private System.Windows.Forms.TextBox tb_robotIp;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button button12;
     }
 }
 

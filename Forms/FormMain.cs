@@ -2,6 +2,7 @@
 using Android_ADB_Tool.Utils;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -12,7 +13,7 @@ namespace Android_ADB_Tool
 {
     public partial class Form1 : Form
     {
-        private const int MAX_CLOSE_TIME = 300;  //Xs若无操作则关闭adb连接
+        private int max_close_time = 300;  //Xs若无操作则关闭adb连接
         private int adbCloseTimer = 0;
 
         private CMDUtils cmdUtils;
@@ -20,11 +21,27 @@ namespace Android_ADB_Tool
         private ParkingInfo currentParkingInfo = null;
         private PortInfo currentPortInfo = null;
 
+        private UdpSearchService _udpSearchService;
+        private LocalApkHttpServer _apkHttpServer;
+        private readonly Dictionary<string, SearchDeviceInfo> _searchDevices =
+            new Dictionary<string, SearchDeviceInfo>(StringComparer.OrdinalIgnoreCase);
+        private string _selectedSearchDeviceIp;
+        private Timer _searchDeviceExpireTimer;
+
         public Form1()
         {
             InitializeComponent();
             cmdUtils = new CMDUtils();
             initList();
+            WireSearchUiEvents();
+        }
+
+        private void WireSearchUiEvents()
+        {
+            bt_search_listen.Click += bt_search_listen_Click;
+            bt_search_apk_browse.Click += bt_search_apk_browse_Click;
+            bt_search_upgrade.Click += bt_search_upgrade_Click;
+            dgv_search_devices.CellClick += dgv_search_devices_CellClick;
         }
 
         /**
@@ -72,7 +89,7 @@ namespace Android_ADB_Tool
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            StopSearchServicesAndClearUi();
             sr = cmdUtils.RunCmd("adb disconnect");
             timer1.Enabled = false;
             timer2.Enabled = false;
@@ -89,8 +106,10 @@ namespace Android_ADB_Tool
             }
             Console.WriteLine("radioButton1_CheckedChanged");
             button1.Enabled = true;
-            comboBox2.Enabled = true;
             comboBox1.Enabled = false;
+            comboBox1.Visible = false;
+            comboBox2.Enabled = true;
+            comboBox2.Visible = true;
         }
 
         /**
@@ -102,15 +121,15 @@ namespace Android_ADB_Tool
             {
                 return;
             }
-            Util.QueryDevices(cmdUtils, comboBox2, null, comboBox1);
-            
+            comboBox1.Enabled = true;
+            comboBox1.Visible = true;
+            comboBox2.Visible = false;
+            Util.QueryDevices(cmdUtils, comboBox2, null, comboBox1);  
         }
-
-
 
         /**
          * IP连接/断开
-         */ 
+         */
         private void button1_Click(object sender, EventArgs e)
         {
             adbCloseTimer = 0;
@@ -149,7 +168,7 @@ namespace Android_ADB_Tool
         private void timer2_Tick(object sender, EventArgs e)
         {
             adbCloseTimer += 1;
-            if (adbCloseTimer > MAX_CLOSE_TIME)
+            if (adbCloseTimer > max_close_time)
             {
                 string line = "";
                 sr = cmdUtils.RunCmd("adb disconnect");
@@ -757,7 +776,9 @@ namespace Android_ADB_Tool
         private void label_menu_general_Click(object sender, EventArgs e)
         {
             label_menu_config1.Visible = false;
+            label_menu_search1.Visible = false;
             panel_config.Visible = false;
+            panel_search.Visible = false;
             label_menu_general1.Visible = true;
             panel_general.Visible = true;
         }
@@ -768,9 +789,424 @@ namespace Android_ADB_Tool
         private void label_menu_config_Click(object sender, EventArgs e)
         {
             label_menu_general1.Visible = false;
+            label_menu_search1.Visible = false;
             panel_general.Visible = false;
+            panel_search.Visible = false;
             label_menu_config1.Visible = true;
             panel_config.Visible = true;
+        }
+
+        /**
+         * 搜索选项页面
+         */
+        private void label_menu_search_Click(object sender, EventArgs e)
+        {
+            label_menu_general1.Visible = false;
+            label_menu_config1.Visible = false;
+            panel_general.Visible = false;
+            panel_config.Visible = false;
+            label_menu_search1.Visible = true;
+            panel_search.Visible = true;
+        }
+
+        private void bt_search_listen_Click(object sender, EventArgs e)
+        {
+            if (bt_search_listen.Text.Equals("搜索"))
+            {
+                StartSearchServices();
+            }
+            else
+            {
+                StopSearchServicesAndClearUi();
+            }
+        }
+
+        private void StartSearchServices()
+        {
+            try
+            {
+                if (_apkHttpServer == null)
+                {
+                    _apkHttpServer = new LocalApkHttpServer();
+                }
+                if (!_apkHttpServer.IsRunning)
+                {
+                    _apkHttpServer.Start(OtaProtocol.HttpPort);
+                    NetHelper.TryAllowInboundTcp(OtaProtocol.HttpPort, "Android_ADB_Tool_OTA_HTTP");
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("HTTP服务启动失败，端口 " + OtaProtocol.HttpPort + " 冲突或无法绑定！",
+                    "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                try
+                {
+                    if (_apkHttpServer != null)
+                    {
+                        _apkHttpServer.Stop();
+                    }
+                }
+                catch { }
+                SetListenButtonIdle();
+                return;
+            }
+
+            try
+            {
+                if (_udpSearchService == null)
+                {
+                    _udpSearchService = new UdpSearchService();
+                    _udpSearchService.OnDiscover += OnSearchDiscover;
+                    _udpSearchService.OnStatus += OnSearchStatus;
+                }
+                if (!_udpSearchService.IsRunning)
+                {
+                    _udpSearchService.Start(OtaProtocol.UdpPort);
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("UDP服务启动失败，端口 " + OtaProtocol.UdpPort + " 冲突或无法绑定！",
+                    "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                try
+                {
+                    if (_apkHttpServer != null)
+                    {
+                        _apkHttpServer.Stop();
+                    }
+                }
+                catch { }
+                SetListenButtonIdle();
+                return;
+            }
+
+            bt_search_listen.Text = "关闭";
+            bt_search_listen.BackColor = Color.Red;
+            bt_search_listen.ForeColor = Color.White;
+            StartSearchDeviceExpireTimer();
+            _selectedSearchDeviceIp = null;
+            label_search_selected_ip.Text = "--";
+            SyncSearchDeviceGridSelection();
+        }
+
+        private void StartSearchDeviceExpireTimer()
+        {
+            if (_searchDeviceExpireTimer == null)
+            {
+                _searchDeviceExpireTimer = new Timer();
+                _searchDeviceExpireTimer.Interval = 1000;
+                _searchDeviceExpireTimer.Tick += SearchDeviceExpireTimer_Tick;
+            }
+            _searchDeviceExpireTimer.Enabled = true;
+        }
+
+        private void StopSearchDeviceExpireTimer()
+        {
+            if (_searchDeviceExpireTimer != null)
+            {
+                _searchDeviceExpireTimer.Enabled = false;
+            }
+        }
+
+        private void SearchDeviceExpireTimer_Tick(object sender, EventArgs e)
+        {
+            if (_searchDevices.Count == 0)
+            {
+                return;
+            }
+            DateTime now = DateTime.UtcNow;
+            var expiredIps = new List<string>();
+            foreach (KeyValuePair<string, SearchDeviceInfo> kv in _searchDevices)
+            {
+                if ((now - kv.Value.LastSeenUtc).TotalMilliseconds >= OtaProtocol.DeviceOfflineTimeoutMs)
+                {
+                    expiredIps.Add(kv.Key);
+                }
+            }
+            foreach (string ip in expiredIps)
+            {
+                RemoveSearchDevice(ip);
+            }
+        }
+
+        private void RemoveSearchDevice(string ip)
+        {
+            if (string.IsNullOrEmpty(ip))
+            {
+                return;
+            }
+            _searchDevices.Remove(ip);
+            for (int i = dgv_search_devices.Rows.Count - 1; i >= 0; i--)
+            {
+                DataGridViewRow row = dgv_search_devices.Rows[i];
+                if (row.IsNewRow)
+                {
+                    continue;
+                }
+                object cellVal = row.Cells["col_search_ip"].Value;
+                if (cellVal != null && string.Equals(cellVal.ToString(), ip, StringComparison.OrdinalIgnoreCase))
+                {
+                    dgv_search_devices.Rows.RemoveAt(i);
+                    break;
+                }
+            }
+            if (string.Equals(_selectedSearchDeviceIp, ip, StringComparison.OrdinalIgnoreCase))
+            {
+                _selectedSearchDeviceIp = null;
+                label_search_selected_ip.Text = "--";
+            }
+            SyncSearchDeviceGridSelection();
+        }
+
+        private void StopSearchServicesAndClearUi()
+        {
+            StopSearchDeviceExpireTimer();
+            try
+            {
+                if (_udpSearchService != null)
+                {
+                    _udpSearchService.Stop();
+                }
+            }
+            catch { }
+            try
+            {
+                if (_apkHttpServer != null)
+                {
+                    _apkHttpServer.Stop();
+                }
+            }
+            catch { }
+
+            _searchDevices.Clear();
+            _selectedSearchDeviceIp = null;
+            if (dgv_search_devices.InvokeRequired)
+            {
+                dgv_search_devices.Invoke(new Action(() =>
+                {
+                    dgv_search_devices.Rows.Clear();
+                    label_search_selected_ip.Text = "--";
+                    tb_search_apk_path.Text = "";
+                    SetListenButtonIdle();
+                }));
+            }
+            else
+            {
+                dgv_search_devices.Rows.Clear();
+                label_search_selected_ip.Text = "--";
+                tb_search_apk_path.Text = "";
+                SetListenButtonIdle();
+            }
+        }
+
+        private void SetListenButtonIdle()
+        {
+            bt_search_listen.Text = "搜索";
+            bt_search_listen.BackColor = Color.Green;
+            bt_search_listen.ForeColor = Color.White;
+        }
+
+        private void OnSearchDiscover(SearchDeviceInfo device)
+        {
+            if (device == null || string.IsNullOrEmpty(device.Ip))
+            {
+                return;
+            }
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() => UpsertSearchDevice(device)));
+            }
+            else
+            {
+                UpsertSearchDevice(device);
+            }
+        }
+
+        private void UpsertSearchDevice(SearchDeviceInfo device)
+        {
+            device.LastSeenUtc = DateTime.UtcNow;
+            _searchDevices[device.Ip] = device;
+            foreach (DataGridViewRow row in dgv_search_devices.Rows)
+            {
+                if (row.IsNewRow)
+                {
+                    continue;
+                }
+                object cellVal = row.Cells["col_search_ip"].Value;
+                if (cellVal != null && string.Equals(cellVal.ToString(), device.Ip, StringComparison.OrdinalIgnoreCase))
+                {
+                    row.Cells["col_search_mac"].Value = device.Mac;
+                    row.Cells["col_search_type"].Value = device.Type;
+                    row.Cells["col_search_version"].Value = device.Ver;
+                    return;
+                }
+            }
+            dgv_search_devices.Rows.Add(device.Ip, device.Mac, device.Type, device.Ver);
+            // 新增行时 DataGridView 会自动选中，恢复为「仅用户点击才选中」
+            SyncSearchDeviceGridSelection();
+        }
+
+        /// <summary>
+        /// 列表默认不选中；仅当用户已点选过某 IP 时保持该行高亮。
+        /// </summary>
+        private void SyncSearchDeviceGridSelection()
+        {
+            dgv_search_devices.ClearSelection();
+            dgv_search_devices.CurrentCell = null;
+            if (string.IsNullOrEmpty(_selectedSearchDeviceIp))
+            {
+                return;
+            }
+            foreach (DataGridViewRow row in dgv_search_devices.Rows)
+            {
+                if (row.IsNewRow)
+                {
+                    continue;
+                }
+                object cellVal = row.Cells["col_search_ip"].Value;
+                if (cellVal != null
+                    && string.Equals(cellVal.ToString(), _selectedSearchDeviceIp, StringComparison.OrdinalIgnoreCase))
+                {
+                    row.Selected = true;
+                    if (row.Cells.Count > 0 && row.Cells[0].Visible)
+                    {
+                        dgv_search_devices.CurrentCell = row.Cells[0];
+                    }
+                    break;
+                }
+            }
+        }
+
+        private void OnSearchStatus(string ip, string ver, string code, string msg)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() => HandleSearchStatus(ip, ver, code, msg)));
+            }
+            else
+            {
+                HandleSearchStatus(ip, ver, code, msg);
+            }
+        }
+
+        private void HandleSearchStatus(string ip, string ver, string code, string msg)
+        {
+            if (string.Equals(code, OtaProtocol.CodeAlreadyLatest, StringComparison.Ordinal))
+            {
+                RefreshDeviceVersion(ip, ver);
+            }
+            MessageBox.Show(string.IsNullOrEmpty(msg) ? code : msg,
+                "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void RefreshDeviceVersion(string ip, string ver)
+        {
+            if (string.IsNullOrEmpty(ip) || string.IsNullOrEmpty(ver))
+            {
+                return;
+            }
+            if (_searchDevices.ContainsKey(ip))
+            {
+                _searchDevices[ip].Ver = ver;
+            }
+            foreach (DataGridViewRow row in dgv_search_devices.Rows)
+            {
+                if (row.IsNewRow)
+                {
+                    continue;
+                }
+                object cellVal = row.Cells["col_search_ip"].Value;
+                if (cellVal != null && string.Equals(cellVal.ToString(), ip, StringComparison.OrdinalIgnoreCase))
+                {
+                    row.Cells["col_search_version"].Value = ver;
+                    break;
+                }
+            }
+        }
+
+        private void dgv_search_devices_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0)
+            {
+                return;
+            }
+            DataGridViewRow row = dgv_search_devices.Rows[e.RowIndex];
+            object ipObj = row.Cells["col_search_ip"].Value;
+            if (ipObj == null)
+            {
+                return;
+            }
+            _selectedSearchDeviceIp = ipObj.ToString();
+            label_search_selected_ip.Text = _selectedSearchDeviceIp;
+        }
+
+        private void bt_search_apk_browse_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "APK文件|*.apk";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                tb_search_apk_path.Text = openFileDialog.FileName;
+                if (_apkHttpServer != null)
+                {
+                    _apkHttpServer.SetApkPath(openFileDialog.FileName);
+                }
+            }
+        }
+
+        private void bt_search_upgrade_Click(object sender, EventArgs e)
+        {
+            if (_udpSearchService == null || !_udpSearchService.IsRunning
+                || _apkHttpServer == null || !_apkHttpServer.IsRunning)
+            {
+                MessageBox.Show("请先点击搜索！", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (string.IsNullOrEmpty(_selectedSearchDeviceIp)
+                || !_searchDevices.ContainsKey(_selectedSearchDeviceIp))
+            {
+                MessageBox.Show("请先选择设备！", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            string apkPath = tb_search_apk_path.Text;
+            if (string.IsNullOrWhiteSpace(apkPath) || !File.Exists(apkPath))
+            {
+                MessageBox.Show("请选择正确的APK！", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            string apkVer;
+            if (!ApkFileNameUtil.TryGetVersion(apkPath, out apkVer))
+            {
+                MessageBox.Show("请选择正确的APK！", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            SearchDeviceInfo device = _searchDevices[_selectedSearchDeviceIp];
+            if (!VersionCompareUtil.CanUpgrade(device.Ver, apkVer))
+            {
+                MessageBox.Show("升级失败：当前版本需大于设备版本", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string lanIp = NetHelper.GetLocalLanIp(device.Ip);
+            if (string.IsNullOrEmpty(lanIp))
+            {
+                MessageBox.Show("无法获取与设备同网段的本机IP！请确认电脑网卡与设备在同一局域网。",
+                    "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            _apkHttpServer.SetApkPath(apkPath);
+            string url = "http://" + lanIp + ":" + OtaProtocol.HttpPort + "/upgrade.apk";
+            try
+            {
+                _udpSearchService.SendUpgrade(device.Ip, apkVer, url);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("发送升级指令失败：" + ex.Message, "消息提示",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /** 查询车场信息 */
@@ -1350,12 +1786,51 @@ namespace Android_ADB_Tool
             {
                 Text = Text.Substring(0, Text.Length - 3);
                 HttpUtils.SERVER_BASE_URL = HttpUtils.SERVER_BASE_URL_OFFICIAL;
+                max_close_time = 300;
             }
             else
             {
                 Text = Text + "_测试";
                 HttpUtils.SERVER_BASE_URL = HttpUtils.SERVER_BASE_URL_TEST;
+                max_close_time = 28800;
             }
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("返回桌面");
+            if (!isConnected())
+            {
+                return;
+            }
+            button12.Enabled = false;
+            label11.Text = "请稍后..";
+            label11.ForeColor = Color.Gray;
+            Boolean isSuccess = false;
+            string line = "";
+            sr = cmdUtils.RunCmd("adb -s " + getDevice() + " shell input keyevent 3");
+            int count = 0;
+            while ((line = sr.ReadLine()) != null)
+            {
+                count++;
+                Console.WriteLine(line);
+            }
+            if (count <= 4)
+            {
+                isSuccess = true;
+                label11.Text = "成功";
+                label11.ForeColor = Color.Green;
+                button12.Enabled = true;
+
+            }
+            if (!isSuccess)
+            {
+                label11.Text = "失败";
+                label11.ForeColor = Color.Red;
+
+            }
+            button12.Enabled = true;
+
         }
     }
 }

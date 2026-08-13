@@ -54,7 +54,15 @@
   <ItemGroup>
     <Compile Include="Entity\ParkingInfo.cs" />
     <Compile Include="Entity\PortInfo.cs" />
+    <Compile Include="Entity\SearchDeviceInfo.cs" />
     <Compile Include="Utils\CMDUtils.cs" />
+    <Compile Include="Utils\OtaProtocol.cs" />
+    <Compile Include="Utils\OtaAuth.cs" />
+    <Compile Include="Utils\ApkFileNameUtil.cs" />
+    <Compile Include="Utils\VersionCompareUtil.cs" />
+    <Compile Include="Utils\LocalApkHttpServer.cs" />
+    <Compile Include="Utils\UdpSearchService.cs" />
+    <Compile Include="Utils\NetHelper.cs" />
     <Compile Include="Forms\FormMain.cs">
       <SubType>Form</SubType>
     </Compile>

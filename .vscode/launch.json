@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch (no debug)",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "${workspaceFolder}\\bin\\Debug\\Android_ADB_Tool.exe",
+            "runtimeArgs": [],
+            "console": "integratedTerminal",
+            "preLaunchTask": "build"
+        }
+    ]
+}
