@@ -156,10 +156,13 @@
             this.label29 = new System.Windows.Forms.Label();
             this.panel_search = new System.Windows.Forms.Panel();
             this.groupBox_search = new System.Windows.Forms.GroupBox();
+            this.label_search_status = new System.Windows.Forms.Label();
             this.bt_search_upgrade = new System.Windows.Forms.Button();
             this.bt_search_apk_browse = new System.Windows.Forms.Button();
             this.tb_search_apk_path = new System.Windows.Forms.TextBox();
             this.label_search_path = new System.Windows.Forms.Label();
+            this.label_search_selected_type = new System.Windows.Forms.Label();
+            this.label_search_selected_type_title = new System.Windows.Forms.Label();
             this.label_search_selected_ip = new System.Windows.Forms.Label();
             this.label_search_selected_ip_title = new System.Windows.Forms.Label();
             this.dgv_search_devices = new System.Windows.Forms.DataGridView();
@@ -747,7 +750,7 @@
             this.label_menu_search.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label_menu_search.Size = new System.Drawing.Size(41, 176);
             this.label_menu_search.TabIndex = 11;
-            this.label_menu_search.Text = "引导屏";
+            this.label_menu_search.Text = "设备";
             this.label_menu_search.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label_menu_search.Click += new System.EventHandler(this.label_menu_search_Click);
             // 
@@ -785,7 +788,7 @@
             this.label_menu_search1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label_menu_search1.Size = new System.Drawing.Size(50, 176);
             this.label_menu_search1.TabIndex = 12;
-            this.label_menu_search1.Text = "引导屏";
+            this.label_menu_search1.Text = "设备";
             this.label_menu_search1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label_menu_search1.Visible = false;
             // 
@@ -1494,23 +1497,37 @@
             // groupBox_search
             // 
             this.groupBox_search.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox_search.Controls.Add(this.label_search_status);
             this.groupBox_search.Controls.Add(this.bt_search_upgrade);
             this.groupBox_search.Controls.Add(this.bt_search_apk_browse);
             this.groupBox_search.Controls.Add(this.tb_search_apk_path);
             this.groupBox_search.Controls.Add(this.label_search_path);
+            this.groupBox_search.Controls.Add(this.label_search_selected_type);
+            this.groupBox_search.Controls.Add(this.label_search_selected_type_title);
             this.groupBox_search.Controls.Add(this.label_search_selected_ip);
             this.groupBox_search.Controls.Add(this.label_search_selected_ip_title);
             this.groupBox_search.Location = new System.Drawing.Point(10, 335);
             this.groupBox_search.Name = "groupBox_search";
-            this.groupBox_search.Size = new System.Drawing.Size(590, 143);
+            this.groupBox_search.Size = new System.Drawing.Size(590, 160);
             this.groupBox_search.TabIndex = 2;
             this.groupBox_search.TabStop = false;
             this.groupBox_search.Text = "操作面板";
             // 
+            // label_search_status
+            // 
+            this.label_search_status.AutoSize = true;
+            this.label_search_status.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_search_status.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.label_search_status.Location = new System.Drawing.Point(28, 68);
+            this.label_search_status.Name = "label_search_status";
+            this.label_search_status.Size = new System.Drawing.Size(59, 12);
+            this.label_search_status.TabIndex = 8;
+            this.label_search_status.Text = "状态: --";
+            // 
             // bt_search_upgrade
             // 
             this.bt_search_upgrade.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.bt_search_upgrade.Location = new System.Drawing.Point(487, 63);
+            this.bt_search_upgrade.Location = new System.Drawing.Point(488, 97);
             this.bt_search_upgrade.Name = "bt_search_upgrade";
             this.bt_search_upgrade.Size = new System.Drawing.Size(70, 30);
             this.bt_search_upgrade.TabIndex = 5;
@@ -1519,7 +1536,7 @@
             // 
             // bt_search_apk_browse
             // 
-            this.bt_search_apk_browse.Location = new System.Drawing.Point(409, 69);
+            this.bt_search_apk_browse.Location = new System.Drawing.Point(425, 102);
             this.bt_search_apk_browse.Name = "bt_search_apk_browse";
             this.bt_search_apk_browse.Size = new System.Drawing.Size(43, 21);
             this.bt_search_apk_browse.TabIndex = 4;
@@ -1528,7 +1545,7 @@
             // 
             // tb_search_apk_path
             // 
-            this.tb_search_apk_path.Location = new System.Drawing.Point(68, 69);
+            this.tb_search_apk_path.Location = new System.Drawing.Point(84, 102);
             this.tb_search_apk_path.Name = "tb_search_apk_path";
             this.tb_search_apk_path.Size = new System.Drawing.Size(341, 21);
             this.tb_search_apk_path.TabIndex = 3;
@@ -1536,17 +1553,36 @@
             // label_search_path
             // 
             this.label_search_path.AutoSize = true;
-            this.label_search_path.Location = new System.Drawing.Point(27, 72);
+            this.label_search_path.Location = new System.Drawing.Point(28, 106);
             this.label_search_path.Name = "label_search_path";
-            this.label_search_path.Size = new System.Drawing.Size(35, 12);
+            this.label_search_path.Size = new System.Drawing.Size(59, 12);
             this.label_search_path.TabIndex = 2;
-            this.label_search_path.Text = "path:";
+            this.label_search_path.Text = "APK path:";
+            // 
+            // label_search_selected_type
+            // 
+            this.label_search_selected_type.AutoSize = true;
+            this.label_search_selected_type.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_search_selected_type.Location = new System.Drawing.Point(291, 29);
+            this.label_search_selected_type.Name = "label_search_selected_type";
+            this.label_search_selected_type.Size = new System.Drawing.Size(25, 16);
+            this.label_search_selected_type.TabIndex = 7;
+            this.label_search_selected_type.Text = "--";
+            // 
+            // label_search_selected_type_title
+            // 
+            this.label_search_selected_type_title.AutoSize = true;
+            this.label_search_selected_type_title.Location = new System.Drawing.Point(250, 33);
+            this.label_search_selected_type_title.Name = "label_search_selected_type_title";
+            this.label_search_selected_type_title.Size = new System.Drawing.Size(35, 12);
+            this.label_search_selected_type_title.TabIndex = 6;
+            this.label_search_selected_type_title.Text = "类型:";
             // 
             // label_search_selected_ip
             // 
             this.label_search_selected_ip.AutoSize = true;
             this.label_search_selected_ip.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label_search_selected_ip.Location = new System.Drawing.Point(104, 23);
+            this.label_search_selected_ip.Location = new System.Drawing.Point(104, 29);
             this.label_search_selected_ip.Name = "label_search_selected_ip";
             this.label_search_selected_ip.Size = new System.Drawing.Size(25, 16);
             this.label_search_selected_ip.TabIndex = 1;
@@ -1555,7 +1591,7 @@
             // label_search_selected_ip_title
             // 
             this.label_search_selected_ip_title.AutoSize = true;
-            this.label_search_selected_ip_title.Location = new System.Drawing.Point(28, 27);
+            this.label_search_selected_ip_title.Location = new System.Drawing.Point(28, 33);
             this.label_search_selected_ip_title.Name = "label_search_selected_ip_title";
             this.label_search_selected_ip_title.Size = new System.Drawing.Size(71, 12);
             this.label_search_selected_ip_title.TabIndex = 0;
@@ -1774,7 +1810,10 @@
         private System.Windows.Forms.GroupBox groupBox_search;
         private System.Windows.Forms.Label label_search_selected_ip_title;
         private System.Windows.Forms.Label label_search_selected_ip;
+        private System.Windows.Forms.Label label_search_selected_type_title;
+        private System.Windows.Forms.Label label_search_selected_type;
         private System.Windows.Forms.Label label_search_path;
+        private System.Windows.Forms.Label label_search_status;
         private System.Windows.Forms.TextBox tb_search_apk_path;
         private System.Windows.Forms.Button bt_search_apk_browse;
         private System.Windows.Forms.Button bt_search_upgrade;

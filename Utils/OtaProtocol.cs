@@ -15,8 +15,8 @@ namespace Android_ADB_Tool.Utils
         /// <summary>连续未收到心跳次数，达到后从列表移除</summary>
         public const int OfflineMissedBeacons = 2;
         public const int DeviceOfflineTimeoutMs = BeaconIntervalMs * OfflineMissedBeacons;
-        /// <summary>与 A 端 DISCOVER type 一致</summary>
-        public const string DeviceType = "InfoScreen";
+        public const string DeviceTypeInfoScreen = "InfoScreen";
+        public const string DeviceTypeReverseForCar = "ReverseForCar";
         public const string CmdDiscover = "DISCOVER";
         public const string CmdUpgrade = "UPGRADE";
         public const string CmdStatus = "STATUS";
@@ -25,12 +25,47 @@ namespace Android_ADB_Tool.Utils
         public const string CodeBusy = "BUSY";
         public const string CodeReady = "READY";
         public const string CodeFail = "FAIL";
+        public const string CodeSuccess = "SUCCESS";
+        public const int UpgradeResultTimeoutMs = 180000;
 
-        private static readonly Regex VersionRegex = new Regex(@"^\d+\.\d+$", RegexOptions.Compiled);
+        private static readonly Regex VersionXyRegex = new Regex(@"^\d+\.\d+$", RegexOptions.Compiled);
+        private static readonly Regex VersionXyzRegex = new Regex(@"^\d+\.\d+\.\d+$", RegexOptions.Compiled);
 
-        public static bool IsValidVersion(string ver)
+        public static bool IsKnownDeviceType(string type)
         {
-            return !string.IsNullOrWhiteSpace(ver) && VersionRegex.IsMatch(ver.Trim());
+            return string.Equals(type, DeviceTypeInfoScreen, StringComparison.Ordinal)
+                || string.Equals(type, DeviceTypeReverseForCar, StringComparison.Ordinal);
+        }
+
+        public static bool IsValidVersionForType(string type, string ver)
+        {
+            if (string.IsNullOrWhiteSpace(ver))
+            {
+                return false;
+            }
+            string v = ver.Trim();
+            if (string.Equals(type, DeviceTypeInfoScreen, StringComparison.Ordinal))
+            {
+                return VersionXyRegex.IsMatch(v);
+            }
+            if (string.Equals(type, DeviceTypeReverseForCar, StringComparison.Ordinal))
+            {
+                return VersionXyzRegex.IsMatch(v);
+            }
+            return false;
+        }
+
+        public static string ToDisplayType(string type)
+        {
+            if (string.Equals(type, DeviceTypeInfoScreen, StringComparison.Ordinal))
+            {
+                return "引导屏";
+            }
+            if (string.Equals(type, DeviceTypeReverseForCar, StringComparison.Ordinal))
+            {
+                return "寻车机";
+            }
+            return "--";
         }
 
         public static Dictionary<string, string> ParseFields(string message, out string cmd)
@@ -88,7 +123,8 @@ namespace Android_ADB_Tool.Utils
             {
                 return null;
             }
-            if (!IsValidVersion(map["ver"]))
+            string type = map["type"];
+            if (!IsKnownDeviceType(type) || !IsValidVersionForType(type, map["ver"]))
             {
                 return null;
             }
@@ -96,7 +132,7 @@ namespace Android_ADB_Tool.Utils
             {
                 Ip = map["ip"],
                 Mac = map["mac"],
-                Type = map["type"],
+                Type = type,
                 Ver = map["ver"]
             };
         }

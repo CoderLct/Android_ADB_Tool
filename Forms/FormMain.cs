@@ -27,6 +27,9 @@ namespace Android_ADB_Tool
             new Dictionary<string, SearchDeviceInfo>(StringComparer.OrdinalIgnoreCase);
         private string _selectedSearchDeviceIp;
         private Timer _searchDeviceExpireTimer;
+        private string _pendingUpgradeIp;
+        private string _pendingUpgradeVer;
+        private DateTime _pendingUpgradeUtc;
 
         public Form1()
         {
@@ -884,8 +887,7 @@ namespace Android_ADB_Tool
             bt_search_listen.BackColor = Color.Red;
             bt_search_listen.ForeColor = Color.White;
             StartSearchDeviceExpireTimer();
-            _selectedSearchDeviceIp = null;
-            label_search_selected_ip.Text = "--";
+            ClearSelectedSearchDeviceUi();
             SyncSearchDeviceGridSelection();
         }
 
@@ -927,6 +929,7 @@ namespace Android_ADB_Tool
             {
                 RemoveSearchDevice(ip);
             }
+            CheckPendingUpgradeTimeout();
         }
 
         private void RemoveSearchDevice(string ip)
@@ -952,8 +955,7 @@ namespace Android_ADB_Tool
             }
             if (string.Equals(_selectedSearchDeviceIp, ip, StringComparison.OrdinalIgnoreCase))
             {
-                _selectedSearchDeviceIp = null;
-                label_search_selected_ip.Text = "--";
+                ClearSelectedSearchDeviceUi();
             }
             SyncSearchDeviceGridSelection();
         }
@@ -979,22 +981,24 @@ namespace Android_ADB_Tool
             catch { }
 
             _searchDevices.Clear();
-            _selectedSearchDeviceIp = null;
+            ClearPendingUpgrade();
             if (dgv_search_devices.InvokeRequired)
             {
                 dgv_search_devices.Invoke(new Action(() =>
                 {
                     dgv_search_devices.Rows.Clear();
-                    label_search_selected_ip.Text = "--";
+                    ClearSelectedSearchDeviceUi();
                     tb_search_apk_path.Text = "";
+                    SetUpgradeStatus("--");
                     SetListenButtonIdle();
                 }));
             }
             else
             {
                 dgv_search_devices.Rows.Clear();
-                label_search_selected_ip.Text = "--";
+                ClearSelectedSearchDeviceUi();
                 tb_search_apk_path.Text = "";
+                SetUpgradeStatus("--");
                 SetListenButtonIdle();
             }
         }
@@ -1004,6 +1008,13 @@ namespace Android_ADB_Tool
             bt_search_listen.Text = "搜索";
             bt_search_listen.BackColor = Color.Green;
             bt_search_listen.ForeColor = Color.White;
+        }
+
+        private void SetUpgradeControlsBusy(bool busy)
+        {
+            bt_search_upgrade.Enabled = !busy;
+            bt_search_upgrade.Text = busy ? "升级中..." : "升级";
+            bt_search_listen.Enabled = !busy;
         }
 
         private void OnSearchDiscover(SearchDeviceInfo device)
@@ -1036,14 +1047,20 @@ namespace Android_ADB_Tool
                 if (cellVal != null && string.Equals(cellVal.ToString(), device.Ip, StringComparison.OrdinalIgnoreCase))
                 {
                     row.Cells["col_search_mac"].Value = device.Mac;
-                    row.Cells["col_search_type"].Value = device.Type;
+                    row.Cells["col_search_type"].Value = OtaProtocol.ToDisplayType(device.Type);
                     row.Cells["col_search_version"].Value = device.Ver;
+                    if (string.Equals(_selectedSearchDeviceIp, device.Ip, StringComparison.OrdinalIgnoreCase))
+                    {
+                        ShowSelectedSearchDevice(device);
+                    }
+                    TryConfirmUpgradeByDiscover(device);
                     return;
                 }
             }
-            dgv_search_devices.Rows.Add(device.Ip, device.Mac, device.Type, device.Ver);
+            dgv_search_devices.Rows.Add(device.Ip, device.Mac, OtaProtocol.ToDisplayType(device.Type), device.Ver);
             // 新增行时 DataGridView 会自动选中，恢复为「仅用户点击才选中」
             SyncSearchDeviceGridSelection();
+            TryConfirmUpgradeByDiscover(device);
         }
 
         /// <summary>
@@ -1091,12 +1108,60 @@ namespace Android_ADB_Tool
 
         private void HandleSearchStatus(string ip, string ver, string code, string msg)
         {
-            if (string.Equals(code, OtaProtocol.CodeAlreadyLatest, StringComparison.Ordinal))
+            string text = string.IsNullOrEmpty(msg) ? code : msg;
+            bool selectedIsTarget = IsPendingUpgrade(ip)
+                || string.Equals(_selectedSearchDeviceIp, ip, StringComparison.OrdinalIgnoreCase);
+            if (string.Equals(code, OtaProtocol.CodeReady, StringComparison.Ordinal))
             {
-                RefreshDeviceVersion(ip, ver);
+                if (selectedIsTarget)
+                {
+                    SetUpgradeStatus(text);
+                }
+                return;
             }
-            MessageBox.Show(string.IsNullOrEmpty(msg) ? code : msg,
-                "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (string.Equals(code, OtaProtocol.CodeSuccess, StringComparison.Ordinal))
+            {
+                CompletePendingUpgradeSuccess(ip, ver, false);
+                if (selectedIsTarget)
+                {
+                    SetUpgradeStatus(text + (string.IsNullOrEmpty(ver) ? "" : (" 版本 " + ver)));
+                }
+                MessageBox.Show(text, "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (string.Equals(code, OtaProtocol.CodeFail, StringComparison.Ordinal)
+                || string.Equals(code, OtaProtocol.CodeAlreadyLatest, StringComparison.Ordinal))
+            {
+                if (string.Equals(code, OtaProtocol.CodeAlreadyLatest, StringComparison.Ordinal))
+                {
+                    RefreshDeviceVersion(ip, ver);
+                }
+                if (IsPendingUpgrade(ip))
+                {
+                    ClearPendingUpgrade();
+                }
+                if (selectedIsTarget)
+                {
+                    SetUpgradeStatus(text);
+                }
+                MessageBox.Show(text, "消息提示", MessageBoxButtons.OK,
+                    string.Equals(code, OtaProtocol.CodeFail, StringComparison.Ordinal)
+                        ? MessageBoxIcon.Error
+                        : MessageBoxIcon.Information);
+                return;
+            }
+            if (string.Equals(code, OtaProtocol.CodeBusy, StringComparison.Ordinal))
+            {
+                if (selectedIsTarget)
+                {
+                    SetUpgradeStatus(text);
+                }
+                return;
+            }
+            if (selectedIsTarget)
+            {
+                SetUpgradeStatus(text);
+            }
         }
 
         private void RefreshDeviceVersion(string ip, string ver)
@@ -1136,8 +1201,21 @@ namespace Android_ADB_Tool
             {
                 return;
             }
-            _selectedSearchDeviceIp = ipObj.ToString();
-            label_search_selected_ip.Text = _selectedSearchDeviceIp;
+            string newIp = ipObj.ToString();
+            if (!string.Equals(_selectedSearchDeviceIp, newIp, StringComparison.OrdinalIgnoreCase))
+            {
+                SetUpgradeStatus("--");
+            }
+            _selectedSearchDeviceIp = newIp;
+            if (_searchDevices.ContainsKey(_selectedSearchDeviceIp))
+            {
+                ShowSelectedSearchDevice(_searchDevices[_selectedSearchDeviceIp]);
+            }
+            else
+            {
+                label_search_selected_ip.Text = _selectedSearchDeviceIp;
+                label_search_selected_type.Text = "--";
+            }
         }
 
         private void bt_search_apk_browse_Click(object sender, EventArgs e)
@@ -1175,14 +1253,20 @@ namespace Android_ADB_Tool
                 return;
             }
             string apkVer;
-            if (!ApkFileNameUtil.TryGetVersion(apkPath, out apkVer))
+            string apkType;
+            if (!ApkFileNameUtil.TryParse(apkPath, out apkVer, out apkType))
             {
                 MessageBox.Show("请选择正确的APK！", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             SearchDeviceInfo device = _searchDevices[_selectedSearchDeviceIp];
-            if (!VersionCompareUtil.CanUpgrade(device.Ver, apkVer))
+            if (!string.Equals(device.Type, apkType, StringComparison.Ordinal))
+            {
+                MessageBox.Show("APK类型与当前设备类型不匹配", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (!VersionCompareUtil.CanUpgrade(device.Type, device.Ver, apkVer))
             {
                 MessageBox.Show("升级失败：当前版本需大于设备版本", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -1201,12 +1285,125 @@ namespace Android_ADB_Tool
             try
             {
                 _udpSearchService.SendUpgrade(device.Ip, apkVer, url);
+                _pendingUpgradeIp = device.Ip;
+                _pendingUpgradeVer = apkVer;
+                _pendingUpgradeUtc = DateTime.UtcNow;
+                SetUpgradeControlsBusy(true);
+                SetUpgradeStatus("已发送升级指令，等待设备响应...");
             }
             catch (Exception ex)
             {
+                ClearPendingUpgrade();
+                SetUpgradeStatus("发送升级指令失败");
                 MessageBox.Show("发送升级指令失败：" + ex.Message, "消息提示",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void SetUpgradeStatus(string text)
+        {
+            if (label_search_status == null)
+            {
+                return;
+            }
+            label_search_status.Text = "状态: " + (string.IsNullOrEmpty(text) ? "--" : text);
+        }
+
+        private bool IsPendingUpgrade(string ip)
+        {
+            return !string.IsNullOrEmpty(_pendingUpgradeIp)
+                && !string.IsNullOrEmpty(ip)
+                && string.Equals(_pendingUpgradeIp, ip, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private void ClearPendingUpgrade()
+        {
+            _pendingUpgradeIp = null;
+            _pendingUpgradeVer = null;
+            SetUpgradeControlsBusy(false);
+        }
+
+        private void TryConfirmUpgradeByDiscover(SearchDeviceInfo device)
+        {
+            if (device == null || !IsPendingUpgrade(device.Ip) || string.IsNullOrEmpty(_pendingUpgradeVer))
+            {
+                return;
+            }
+            if (string.Equals(device.Ver, _pendingUpgradeVer, StringComparison.Ordinal))
+            {
+                CompletePendingUpgradeSuccess(device.Ip, device.Ver, true);
+            }
+        }
+
+        private void CompletePendingUpgradeSuccess(string ip, string ver, bool fromDiscover)
+        {
+            if (!IsPendingUpgrade(ip) && !fromDiscover)
+            {
+                RefreshDeviceVersion(ip, ver);
+                return;
+            }
+            if (!IsPendingUpgrade(ip))
+            {
+                return;
+            }
+            ClearPendingUpgrade();
+            RefreshDeviceVersion(ip, ver);
+            if (fromDiscover)
+            {
+                if (string.Equals(_selectedSearchDeviceIp, ip, StringComparison.OrdinalIgnoreCase))
+                {
+                    SetUpgradeStatus("升级成功：版本已变为 " + ver);
+                }
+                MessageBox.Show("升级成功：版本已变为 " + ver, "消息提示",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void CheckPendingUpgradeTimeout()
+        {
+            if (string.IsNullOrEmpty(_pendingUpgradeIp))
+            {
+                return;
+            }
+            if ((DateTime.UtcNow - _pendingUpgradeUtc).TotalMilliseconds < OtaProtocol.UpgradeResultTimeoutMs)
+            {
+                return;
+            }
+            string ip = _pendingUpgradeIp;
+            bool selectedPending = string.Equals(_selectedSearchDeviceIp, ip, StringComparison.OrdinalIgnoreCase);
+            ClearPendingUpgrade();
+            if (selectedPending)
+            {
+                SetUpgradeStatus("升级结果未确认（超时），请查看列表版本号");
+            }
+            MessageBox.Show("设备 " + ip + " 升级结果未确认（超时）。若设备已重启，请查看列表中的版本号。",
+                "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private void ClearSelectedSearchDeviceUi()
+        {
+            _selectedSearchDeviceIp = null;
+            if (label_search_selected_ip != null)
+            {
+                label_search_selected_ip.Text = "--";
+            }
+            if (label_search_selected_type != null)
+            {
+                label_search_selected_type.Text = "--";
+            }
+            SetUpgradeStatus("--");
+        }
+
+        private void ShowSelectedSearchDevice(SearchDeviceInfo device)
+        {
+            if (device == null || string.IsNullOrEmpty(device.Ip))
+            {
+                ClearSelectedSearchDeviceUi();
+                return;
+            }
+            _selectedSearchDeviceIp = device.Ip;
+            label_search_selected_ip.Text = device.Ip;
+            label_search_selected_type.Text = OtaProtocol.ToDisplayType(device.Type);
         }
 
         /** 查询车场信息 */

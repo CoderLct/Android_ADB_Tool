@@ -5,38 +5,46 @@ namespace Android_ADB_Tool.Utils
     public static class VersionCompareUtil
     {
         /// <summary>
-        /// 返回 true 表示 apkVer 高于 deviceVer，可升级。
+        /// 仅在同一设备类型、同一版本格式内比较：apkVer 高于 deviceVer 时可升级。
+        /// InfoScreen 只比 x.y；ReverseForCar 只比 x.y.z。
         /// </summary>
-        public static bool CanUpgrade(string deviceVer, string apkVer)
+        public static bool CanUpgrade(string deviceType, string deviceVer, string apkVer)
         {
-            if (!TryParse(deviceVer, out int x1, out int y1) || !TryParse(apkVer, out int x2, out int y2))
+            int[] deviceParts;
+            int[] apkParts;
+            if (!TryParseForType(deviceType, deviceVer, out deviceParts)
+                || !TryParseForType(deviceType, apkVer, out apkParts))
             {
                 return false;
             }
-            return x2 > x1 || (x2 == x1 && y2 > y1);
+            for (int i = 0; i < deviceParts.Length; i++)
+            {
+                if (apkParts[i] != deviceParts[i])
+                {
+                    return apkParts[i] > deviceParts[i];
+                }
+            }
+            return false;
         }
 
-        /// <summary>
-        /// 返回 true 表示 left >= right（设备已是最新或更高）。
-        /// </summary>
-        public static bool IsGreaterOrEqual(string left, string right)
+        private static bool TryParseForType(string type, string ver, out int[] parts)
         {
-            if (!TryParse(left, out int x1, out int y1) || !TryParse(right, out int x2, out int y2))
+            parts = null;
+            if (!OtaProtocol.IsValidVersionForType(type, ver))
             {
                 return false;
             }
-            return x1 > x2 || (x1 == x2 && y1 >= y2);
-        }
-
-        public static bool TryParse(string ver, out int x, out int y)
-        {
-            x = y = 0;
-            if (!OtaProtocol.IsValidVersion(ver))
+            string[] segs = ver.Trim().Split('.');
+            parts = new int[segs.Length];
+            for (int i = 0; i < segs.Length; i++)
             {
-                return false;
+                if (!int.TryParse(segs[i], out parts[i]))
+                {
+                    parts = null;
+                    return false;
+                }
             }
-            string[] parts = ver.Trim().Split('.');
-            return int.TryParse(parts[0], out x) && int.TryParse(parts[1], out y);
+            return true;
         }
     }
 }
