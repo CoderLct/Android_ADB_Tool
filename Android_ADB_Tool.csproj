@@ -8,6 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Android_ADB_Tool</RootNamespace>
     <AssemblyName>Android_ADB_Tool</AssemblyName>
+    <!-- 开发机用 4.8 打开；2012 R2 运行兼容靠不调用 4.6+ API，不要改成 4.5.1（VS 常缺 Targeting Pack 导致项目打不开） -->
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

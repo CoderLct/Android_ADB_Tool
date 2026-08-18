@@ -39,7 +39,9 @@ namespace Android_ADB_Tool.Utils
 
         public static string NowTsMs()
         {
-            return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+            // 不用 DateTimeOffset.ToUnixTimeMilliseconds（.NET 4.6+），以兼容 Server 2012 R2 自带的 4.5.1
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return ((long)(DateTime.UtcNow - epoch).TotalMilliseconds).ToString();
         }
 
         /// <summary>
