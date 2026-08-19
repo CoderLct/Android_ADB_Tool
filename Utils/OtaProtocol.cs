@@ -20,6 +20,9 @@ namespace Android_ADB_Tool.Utils
         public const string CmdDiscover = "DISCOVER";
         public const string CmdUpgrade = "UPGRADE";
         public const string CmdStatus = "STATUS";
+        public const string CmdPullLog = "PULL_LOG";
+        public const string CmdLog = "LOG";
+        public const int LogHttpPort = 18081;
 
         public const string CodeAlreadyLatest = "ALREADY_LATEST";
         public const string CodeBusy = "BUSY";
@@ -27,6 +30,7 @@ namespace Android_ADB_Tool.Utils
         public const string CodeFail = "FAIL";
         public const string CodeSuccess = "SUCCESS";
         public const int UpgradeResultTimeoutMs = 180000;
+        public const int LogDownloadTimeoutMs = 180000;
 
         private static readonly Regex VersionXyRegex = new Regex(@"^\d+\.\d+$", RegexOptions.Compiled);
         private static readonly Regex VersionXyzRegex = new Regex(@"^\d+\.\d+\.\d+$", RegexOptions.Compiled);
@@ -90,7 +94,9 @@ namespace Android_ADB_Tool.Utils
             cmd = parts[1];
             if (!string.Equals(cmd, CmdDiscover, StringComparison.Ordinal)
                 && !string.Equals(cmd, CmdUpgrade, StringComparison.Ordinal)
-                && !string.Equals(cmd, CmdStatus, StringComparison.Ordinal))
+                && !string.Equals(cmd, CmdStatus, StringComparison.Ordinal)
+                && !string.Equals(cmd, CmdPullLog, StringComparison.Ordinal)
+                && !string.Equals(cmd, CmdLog, StringComparison.Ordinal))
             {
                 return null;
             }
@@ -154,6 +160,30 @@ namespace Android_ADB_Tool.Utils
             code = map["code"];
             msg = map["msg"];
             return true;
+        }
+
+        public static bool ParseLog(string message, out string ip, out string code, out string msg, out string url)
+        {
+            ip = code = msg = url = null;
+            Dictionary<string, string> map = ParseFields(message, out string cmd);
+            if (map == null || !string.Equals(cmd, CmdLog, StringComparison.Ordinal))
+            {
+                return false;
+            }
+            if (!map.ContainsKey("code"))
+            {
+                return false;
+            }
+            ip = map.ContainsKey("ip") ? map["ip"] : "";
+            code = map["code"];
+            msg = map.ContainsKey("msg") ? map["msg"] : "";
+            url = map.ContainsKey("url") ? map["url"] : "";
+            return true;
+        }
+
+        public static string BuildPullLog()
+        {
+            return Magic + "|" + CmdPullLog;
         }
 
         public static string BuildUpgrade(string ver, string url)

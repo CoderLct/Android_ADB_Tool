@@ -157,6 +157,7 @@
             this.panel_search = new System.Windows.Forms.Panel();
             this.groupBox_search = new System.Windows.Forms.GroupBox();
             this.label_search_status = new System.Windows.Forms.Label();
+            this.bt_search_download_log = new System.Windows.Forms.Button();
             this.bt_search_upgrade = new System.Windows.Forms.Button();
             this.bt_search_apk_browse = new System.Windows.Forms.Button();
             this.tb_search_apk_path = new System.Windows.Forms.TextBox();
@@ -1498,6 +1499,7 @@
             // 
             this.groupBox_search.BackColor = System.Drawing.SystemColors.Control;
             this.groupBox_search.Controls.Add(this.label_search_status);
+            this.groupBox_search.Controls.Add(this.bt_search_download_log);
             this.groupBox_search.Controls.Add(this.bt_search_upgrade);
             this.groupBox_search.Controls.Add(this.bt_search_apk_browse);
             this.groupBox_search.Controls.Add(this.tb_search_apk_path);
@@ -1508,7 +1510,7 @@
             this.groupBox_search.Controls.Add(this.label_search_selected_ip_title);
             this.groupBox_search.Location = new System.Drawing.Point(10, 335);
             this.groupBox_search.Name = "groupBox_search";
-            this.groupBox_search.Size = new System.Drawing.Size(590, 160);
+            this.groupBox_search.Size = new System.Drawing.Size(590, 190);
             this.groupBox_search.TabIndex = 2;
             this.groupBox_search.TabStop = false;
             this.groupBox_search.Text = "操作面板";
@@ -1523,6 +1525,16 @@
             this.label_search_status.Size = new System.Drawing.Size(59, 12);
             this.label_search_status.TabIndex = 8;
             this.label_search_status.Text = "状态: --";
+            // 
+            // bt_search_download_log
+            // 
+            this.bt_search_download_log.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.bt_search_download_log.Location = new System.Drawing.Point(30, 144);
+            this.bt_search_download_log.Name = "bt_search_download_log";
+            this.bt_search_download_log.Size = new System.Drawing.Size(80, 30);
+            this.bt_search_download_log.TabIndex = 9;
+            this.bt_search_download_log.Text = "下载日志";
+            this.bt_search_download_log.UseVisualStyleBackColor = false;
             // 
             // bt_search_upgrade
             // 
@@ -1817,6 +1829,7 @@
         private System.Windows.Forms.TextBox tb_search_apk_path;
         private System.Windows.Forms.Button bt_search_apk_browse;
         private System.Windows.Forms.Button bt_search_upgrade;
+        private System.Windows.Forms.Button bt_search_download_log;
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabPage_device;
         internal System.Windows.Forms.TabPage tabPage_robot;

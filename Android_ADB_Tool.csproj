@@ -50,6 +50,8 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +64,8 @@
     <Compile Include="Utils\ApkFileNameUtil.cs" />
     <Compile Include="Utils\VersionCompareUtil.cs" />
     <Compile Include="Utils\LocalApkHttpServer.cs" />
+    <Compile Include="Utils\LogDownloadHelper.cs" />
+    <Compile Include="Utils\FolderPicker.cs" />
     <Compile Include="Utils\UdpSearchService.cs" />
     <Compile Include="Utils\NetHelper.cs" />
     <Compile Include="Forms\FormMain.cs">

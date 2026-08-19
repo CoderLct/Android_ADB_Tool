@@ -22,5 +22,17 @@ namespace Android_ADB_Tool.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastLogSaveDir {
+            get {
+                return ((string)(this["LastLogSaveDir"]));
+            }
+            set {
+                this["LastLogSaveDir"] = value;
+            }
+        }
     }
 }

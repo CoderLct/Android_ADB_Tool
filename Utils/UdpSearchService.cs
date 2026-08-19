@@ -11,9 +11,11 @@ namespace Android_ADB_Tool.Utils
     {
         public delegate void DiscoverHandler(SearchDeviceInfo device);
         public delegate void StatusHandler(string ip, string ver, string code, string msg);
+        public delegate void LogHandler(string ip, string code, string msg, string url);
 
         public event DiscoverHandler OnDiscover;
         public event StatusHandler OnStatus;
+        public event LogHandler OnLog;
 
         private UdpClient _client;
         private Thread _thread;
@@ -63,6 +65,17 @@ namespace Android_ADB_Tool.Utils
                         {
                             sh(ip, ver, code, msg);
                         }
+                        continue;
+                    }
+
+                    string logIp, logCode, logMsg, logUrl;
+                    if (OtaProtocol.ParseLog(text, out logIp, out logCode, out logMsg, out logUrl))
+                    {
+                        LogHandler lh = OnLog;
+                        if (lh != null)
+                        {
+                            lh(logIp, logCode, logMsg, logUrl);
+                        }
                     }
                 }
                 catch (SocketException)
@@ -90,6 +103,17 @@ namespace Android_ADB_Tool.Utils
                 throw new InvalidOperationException("UDP未启动");
             }
             string payload = OtaProtocol.BuildUpgrade(ver, url);
+            byte[] bytes = Encoding.UTF8.GetBytes(payload);
+            _client.Send(bytes, bytes.Length, deviceIp, OtaProtocol.UdpPort);
+        }
+
+        public void SendPullLog(string deviceIp)
+        {
+            if (_client == null)
+            {
+                throw new InvalidOperationException("UDP未启动");
+            }
+            string payload = OtaProtocol.BuildPullLog();
             byte[] bytes = Encoding.UTF8.GetBytes(payload);
             _client.Send(bytes, bytes.Length, deviceIp, OtaProtocol.UdpPort);
         }

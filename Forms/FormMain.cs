@@ -30,6 +30,10 @@ namespace Android_ADB_Tool
         private string _pendingUpgradeIp;
         private string _pendingUpgradeVer;
         private DateTime _pendingUpgradeUtc;
+        private string _pendingLogIp;
+        private string _pendingLogDest;
+        private DateTime _pendingLogUtc;
+        private bool _logDownloading;
 
         public Form1()
         {
@@ -44,6 +48,7 @@ namespace Android_ADB_Tool
             bt_search_listen.Click += bt_search_listen_Click;
             bt_search_apk_browse.Click += bt_search_apk_browse_Click;
             bt_search_upgrade.Click += bt_search_upgrade_Click;
+            bt_search_download_log.Click += bt_search_download_log_Click;
             dgv_search_devices.CellClick += dgv_search_devices_CellClick;
         }
 
@@ -861,6 +866,7 @@ namespace Android_ADB_Tool
                     _udpSearchService = new UdpSearchService();
                     _udpSearchService.OnDiscover += OnSearchDiscover;
                     _udpSearchService.OnStatus += OnSearchStatus;
+                    _udpSearchService.OnLog += OnSearchLog;
                 }
                 if (!_udpSearchService.IsRunning)
                 {
@@ -930,6 +936,7 @@ namespace Android_ADB_Tool
                 RemoveSearchDevice(ip);
             }
             CheckPendingUpgradeTimeout();
+            CheckPendingLogTimeout();
         }
 
         private void RemoveSearchDevice(string ip)
@@ -982,6 +989,7 @@ namespace Android_ADB_Tool
 
             _searchDevices.Clear();
             ClearPendingUpgrade();
+            ClearPendingLogDownload(true);
             if (dgv_search_devices.InvokeRequired)
             {
                 dgv_search_devices.Invoke(new Action(() =>
@@ -1014,6 +1022,21 @@ namespace Android_ADB_Tool
         {
             bt_search_upgrade.Enabled = !busy;
             bt_search_upgrade.Text = busy ? "升级中..." : "升级";
+            bt_search_listen.Enabled = !busy;
+            if (bt_search_download_log != null)
+            {
+                bt_search_download_log.Enabled = !busy;
+            }
+        }
+
+        private void SetLogDownloadControlsBusy(bool busy)
+        {
+            if (bt_search_download_log != null)
+            {
+                bt_search_download_log.Enabled = !busy;
+                bt_search_download_log.Text = busy ? "下载中..." : "下载日志";
+            }
+            bt_search_upgrade.Enabled = !busy;
             bt_search_listen.Enabled = !busy;
         }
 
@@ -1104,6 +1127,121 @@ namespace Android_ADB_Tool
             {
                 HandleSearchStatus(ip, ver, code, msg);
             }
+        }
+
+        private void OnSearchLog(string ip, string code, string msg, string url)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() => HandleSearchLog(ip, code, msg, url)));
+            }
+            else
+            {
+                HandleSearchLog(ip, code, msg, url);
+            }
+        }
+
+        private void HandleSearchLog(string ip, string code, string msg, string url)
+        {
+            if (string.IsNullOrEmpty(_pendingLogIp))
+            {
+                return;
+            }
+            if (_logDownloading)
+            {
+                return;
+            }
+            if (!string.IsNullOrEmpty(ip)
+                && !string.Equals(_pendingLogIp, ip, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+            if (string.Equals(code, OtaProtocol.CodeBusy, StringComparison.Ordinal)
+                || string.Equals(code, OtaProtocol.CodeFail, StringComparison.Ordinal))
+            {
+                string text = string.IsNullOrEmpty(msg) ? code : msg;
+                ClearPendingLogDownload(true);
+                SetUpgradeStatus(text);
+                MessageBox.Show(text, "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (!string.Equals(code, OtaProtocol.CodeReady, StringComparison.Ordinal))
+            {
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                ClearPendingLogDownload(true);
+                SetUpgradeStatus("下载日志失败：设备未返回地址");
+                MessageBox.Show("下载日志失败：设备未返回地址", "消息提示",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            _logDownloading = true;
+            SetUpgradeStatus("正在从设备下载日志...");
+            string dest = _pendingLogDest;
+            string pendingIp = _pendingLogIp;
+            System.Threading.ThreadPool.QueueUserWorkItem(_ => DownloadLogZip(url, dest, pendingIp));
+        }
+
+        private void DownloadLogZip(string url, string dest, string pendingIp)
+        {
+            try
+            {
+                LogDownloadHelper.DownloadAndExtract(url, dest, OtaProtocol.LogDownloadTimeoutMs);
+                BeginInvoke(new Action(() =>
+                {
+                    if (!string.Equals(_pendingLogIp, pendingIp, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return;
+                    }
+                    ClearPendingLogDownload(true);
+                    SetUpgradeStatus("日志下载完成");
+                    MessageBox.Show("日志下载完成", "消息提示",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }));
+            }
+            catch (Exception ex)
+            {
+                BeginInvoke(new Action(() =>
+                {
+                    if (!string.Equals(_pendingLogIp, pendingIp, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return;
+                    }
+                    ClearPendingLogDownload(true);
+                    string text = "日志下载失败：" + ex.Message;
+                    SetUpgradeStatus(text);
+                    MessageBox.Show(text, "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }));
+            }
+        }
+
+        private void ClearPendingLogDownload(bool restoreButtons)
+        {
+            _pendingLogIp = null;
+            _pendingLogDest = null;
+            _logDownloading = false;
+            if (restoreButtons)
+            {
+                SetLogDownloadControlsBusy(false);
+            }
+        }
+
+        private void CheckPendingLogTimeout()
+        {
+            if (string.IsNullOrEmpty(_pendingLogIp) || _logDownloading)
+            {
+                return;
+            }
+            if ((DateTime.UtcNow - _pendingLogUtc).TotalMilliseconds < OtaProtocol.LogDownloadTimeoutMs)
+            {
+                return;
+            }
+            ClearPendingLogDownload(true);
+            SetUpgradeStatus("下载日志超时：设备未响应");
+            MessageBox.Show("下载日志超时：设备未响应", "消息提示",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void HandleSearchStatus(string ip, string ver, string code, string msg)
@@ -1246,6 +1384,11 @@ namespace Android_ADB_Tool
                 MessageBox.Show("请先选择设备！", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (!string.IsNullOrEmpty(_pendingLogIp))
+            {
+                MessageBox.Show("正在下载日志，请稍候", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             string apkPath = tb_search_apk_path.Text;
             if (string.IsNullOrWhiteSpace(apkPath) || !File.Exists(apkPath))
             {
@@ -1296,6 +1439,59 @@ namespace Android_ADB_Tool
                 ClearPendingUpgrade();
                 SetUpgradeStatus("发送升级指令失败");
                 MessageBox.Show("发送升级指令失败：" + ex.Message, "消息提示",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void bt_search_download_log_Click(object sender, EventArgs e)
+        {
+            if (_udpSearchService == null || !_udpSearchService.IsRunning)
+            {
+                MessageBox.Show("请先点击搜索！", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (string.IsNullOrEmpty(_selectedSearchDeviceIp)
+                || !_searchDevices.ContainsKey(_selectedSearchDeviceIp))
+            {
+                MessageBox.Show("请先选择设备！", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (!string.IsNullOrEmpty(_pendingUpgradeIp))
+            {
+                MessageBox.Show("正在升级，请稍候", "消息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (!string.IsNullOrEmpty(_pendingLogIp))
+            {
+                return;
+            }
+
+            string lastDir = Android_ADB_Tool.Properties.Settings.Default.LastLogSaveDir;
+            string selected = FolderPicker.Pick(this, "请选择日志保存目录", lastDir);
+            if (string.IsNullOrEmpty(selected))
+            {
+                return;
+            }
+            Android_ADB_Tool.Properties.Settings.Default.LastLogSaveDir = selected;
+            Android_ADB_Tool.Properties.Settings.Default.Save();
+
+            SearchDeviceInfo device = _searchDevices[_selectedSearchDeviceIp];
+            string destDir = Path.Combine(selected, device.Ip);
+            try
+            {
+                _udpSearchService.SendPullLog(device.Ip);
+                _pendingLogIp = device.Ip;
+                _pendingLogDest = destDir;
+                _pendingLogUtc = DateTime.UtcNow;
+                _logDownloading = false;
+                SetLogDownloadControlsBusy(true);
+                SetUpgradeStatus("已发送下载日志指令，等待设备响应...");
+            }
+            catch (Exception ex)
+            {
+                ClearPendingLogDownload(false);
+                SetUpgradeStatus("发送下载日志指令失败");
+                MessageBox.Show("发送下载日志指令失败：" + ex.Message, "消息提示",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
